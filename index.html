@@ -26,10 +26,12 @@
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'float': 'floating 3s ease-in-out infinite',
                         'tilt': 'tilt 10s infinite linear',
+                        'orbit': 'orbit 20s linear infinite',
                     },
                     keyframes: {
                         floating: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-15px)' } },
-                        tilt: { '0%, 50%, 100%': { transform: 'rotate(0deg)' }, '25%': { transform: 'rotate(0.5deg)' }, '75%': { transform: 'rotate(-0.5deg)' } }
+                        tilt: { '0%, 50%, 100%': { transform: 'rotate(0deg)' }, '25%': { transform: 'rotate(1deg)' }, '75%': { transform: 'rotate(-1deg)' } },
+                        orbit: { '0%': { transform: 'rotate(0deg) translateX(50px) rotate(0deg)' }, '100%': { transform: 'rotate(360deg) translateX(50px) rotate(-360deg)' } }
                     }
                 } 
             }
@@ -39,7 +41,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        /* --- TEMEL ESTETİK --- */
+        /* --- TEMEL ESTETİK & LIQUID SİSTEM --- */
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: linear-gradient(135deg, #020617, #0f172a, #172554);
@@ -60,59 +62,67 @@
         body, html, * { cursor: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l15 6-6.5 2L10 19 4 4z" fill="%232563eb" stroke="%23ffffff" stroke-width="1.5" stroke-linejoin="round"/></svg>') 4 4, auto !important; }
         button, a, .cursor-pointer, input, select { cursor: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l15 6-6.5 2L10 19 4 4z" fill="%23ea580c" stroke="%23ffffff" stroke-width="1.5" stroke-linejoin="round"/></svg>') 4 4, pointer !important; }
 
-        /* --- LİKİT CAM TASARIMI --- */
+        /* --- LİKİT CAM TASARIMI (LIQUID GLASS) --- */
         .glass-card {
-            background: rgba(15, 23, 42, 0.4) !important;
-            backdrop-filter: blur(20px) saturate(180%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
+            background: rgba(15, 23, 42, 0.45) !important;
+            backdrop-filter: blur(25px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.03) !important;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glass-card:hover { transform: translateY(-5px); border-color: rgba(37, 99, 235, 0.4) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); }
-        .liquid-inner { background: rgba(0, 0, 0, 0.35) !important; backdrop-filter: blur(10px) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; }
+        .glass-card:hover { transform: translateY(-8px) scale(1.01); border-color: rgba(37, 99, 235, 0.5) !important; box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8); }
+        .liquid-inner { background: rgba(0, 0, 0, 0.4) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 1.5rem; }
 
         /* --- SABİT LOGO --- */
-        .logo-fixed { position: fixed; top: 32px; left: 32px; z-index: 1000; filter: drop-shadow(0 0 15px rgba(37, 99, 235, 0.4)); transition: transform 0.4s ease; }
-        .logo-fixed:hover { transform: scale(1.05); }
+        .logo-fixed { position: fixed; top: 32px; left: 32px; z-index: 1000; filter: drop-shadow(0 0 15px rgba(37, 99, 235, 0.5)); transition: all 0.5s ease; }
+        .logo-fixed:hover { transform: scale(1.1) rotate(-3deg); }
 
-        /* --- REELS MOTORU 2.0 --- */
-        .reels-wrapper { height: calc(100vh - 150px); display: flex; gap: 24px; }
-        .reels-container { flex: 1; max-width: 450px; height: 100%; border-radius: 3rem; background: #000; position: relative; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; border: 4px solid rgba(255,255,255,0.05); box-shadow: 0 30px 60px -12px rgba(0,0,0,0.9); }
-        .reels-container::-webkit-scrollbar { display: none; }
+        /* --- REELS MODÜLÜ 2.0 (PROFESYONEL) --- */
+        .reels-layout { height: calc(100vh - 160px); display: flex; gap: 30px; }
+        .reels-player-zone { flex: 1; max-width: 460px; height: 100%; border-radius: 3.5rem; background: #000; position: relative; overflow: hidden; border: 6px solid rgba(255,255,255,0.05); box-shadow: 0 40px 80px -20px rgba(0,0,0,1); }
+        .reels-scroll-container { height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
+        .reels-scroll-container::-webkit-scrollbar { display: none; }
         .reel-item { height: 100%; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
         .reel-video { width: 100%; height: 100%; object-fit: contain; }
-        .reel-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 35px; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); pointer-events: none; z-index: 20; }
-        .reel-actions { position: absolute; right: 20px; bottom: 100px; display: flex; flex-direction: column; gap: 24px; z-index: 30; }
-        .reel-catalog { width: 320px; height: 100%; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-right: 10px; }
-        .catalog-item { cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
-        .catalog-item.active { border-color: #2563eb; background: rgba(37, 99, 235, 0.1); transform: scale(1.02); }
+        .reel-ui-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 20; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 40%); }
+        .reel-actions { position: absolute; right: 20px; bottom: 120px; display: flex; flex-direction: column; gap: 25px; z-index: 40; pointer-events: auto; }
+        .reel-info { position: absolute; bottom: 40px; left: 35px; right: 80px; z-index: 30; pointer-events: none; }
+        .reel-catalog-sidebar { width: 340px; height: 100%; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-right: 15px; }
+        .catalog-card { cursor: pointer; transition: all 0.4s ease; border: 2px solid transparent; background: rgba(15, 23, 42, 0.4); }
+        .catalog-card.active { border-color: #2563eb; background: rgba(37, 99, 235, 0.15); transform: translateX(-10px); box-shadow: 15px 0 30px -10px rgba(37, 99, 235, 0.3); }
 
-        /* --- CUSTOM SCROLLBAR --- */
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        /* --- ANALİZ GRID SİSTEMİ --- */
+        .optic-cell { width: 40px; height: 40px; border-radius: 12px; display: flex; items-center; justify-content: center; font-size: 11px; font-weight: 900; border: 2px solid transparent; transition: all 0.3s ease; }
+        .optic-cell:hover { transform: scale(1.15); }
+        .optic-correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.3); }
+        .optic-wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+        .optic-empty { background: rgba(255, 255, 255, 0.05); color: #94a3b8; border-color: rgba(255, 255, 255, 0.1); }
+
+        /* --- SCROLLBAR --- */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.4); border-radius: 10px; }
 
-        .view-fade { animation: fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .view-fade-up { animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- ANALİZ GRID --- */
-        .optic-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; items-center; justify-content: center; font-size: 10px; font-weight: 900; border: 2px solid transparent; }
-        .optic-correct { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: #10b981; }
-        .optic-wrong { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: #ef4444; }
-        .optic-empty { background: rgba(255, 255, 255, 0.05); color: #94a3b8; border-color: #334155; }
+        @media (max-width: 1024px) {
+            .reels-catalog-sidebar { display: none; }
+            .reels-player-zone { max-width: 100%; }
+        }
     </style>
 </head>
 <body class="dark overflow-hidden">
-    <div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div><div class="ambient-orb orb-3"></div>
 
-    <!-- YÜKLEME EKRANI (BILIMSEL) -->
-    <div id="loading" class="fixed inset-0 z-[5000] bg-darkBg flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="relative mb-8">
-            <div class="h-24 w-24 border-4 border-slate-800 border-t-blue-600 rounded-full animate-spin"></div>
+    <!-- LOADER (BİLİMSEL) -->
+    <div id="loading" class="fixed inset-0 z-[5000] bg-darkBg flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative mb-10">
+            <div class="h-32 w-32 border-4 border-slate-800 border-t-blue-600 rounded-full animate-spin"></div>
             <div class="absolute inset-0 flex items-center justify-center">
-                <i class="fa-solid fa-atom text-blue-500 text-3xl animate-pulse"></i>
+                <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" class="h-10 w-auto animate-pulse">
             </div>
         </div>
-        <p class="text-[11px] font-black uppercase tracking-[0.6em] text-blue-500 animate-pulse">MATOTA SİSTEMİ MÜHÜRLENİYOR</p>
+        <p class="text-[11px] font-black uppercase tracking-[0.8em] text-blue-500 animate-pulse">BİLİMSEL SİSTEM BAŞLATILIYOR</p>
     </div>
 
     <!-- SABİT LOGO -->
@@ -120,137 +130,162 @@
         <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" alt="MATOTA" class="h-10 md:h-14 w-auto object-contain">
     </div>
 
-    <!-- LOGIN MODAL (GIRIŞ) -->
+    <!-- LOGIN MODAL -->
     <div id="login-overlay" class="fixed inset-0 z-[4000] bg-darkBg flex flex-col items-center justify-center p-6 hidden">
         <div class="max-w-md w-full glass-card p-12 rounded-[4rem] shadow-2xl text-center border border-white/10 animate__animated animate__zoomIn">
-            <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" class="h-16 mx-auto mb-10 drop-shadow-xl">
-            <h3 class="text-2xl font-black text-white italic uppercase tracking-tighter mb-8">Öğrenci Girişi</h3>
-            <form onsubmit="window.handleLogin(event)" class="space-y-4">
-                <div class="relative"><i class="fa-solid fa-user absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i><input type="email" id="login-email" required class="w-full pl-14 pr-6 py-5 rounded-2xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition" placeholder="E-posta"></div>
-                <div class="relative"><i class="fa-solid fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i><input type="password" id="login-password" required class="w-full pl-14 pr-6 py-5 rounded-2xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition" placeholder="Şifre"></div>
-                <button type="submit" id="login-btn" class="w-full bg-blue-600 text-white py-5 rounded-[2.5rem] font-black uppercase shadow-lg hover:brightness-110 transition tracking-[0.2em] mt-4 border border-white/10">SİSTEME BAĞLAN</button>
+            <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" class="h-20 mx-auto mb-12 drop-shadow-2xl">
+            <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-10">Modern Öğrenci Paneli</h3>
+            <form onsubmit="window.handleLogin(event)" class="space-y-5">
+                <div class="relative">
+                    <i class="fa-solid fa-at absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="email" id="login-email" required class="w-full pl-14 pr-6 py-5 rounded-2xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition shadow-inner font-bold" placeholder="E-posta Adresiniz">
+                </div>
+                <div class="relative">
+                    <i class="fa-solid fa-shield-halved absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="password" id="login-password" required class="w-full pl-14 pr-6 py-5 rounded-2xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition shadow-inner font-bold" placeholder="Güvenlik Şifreniz">
+                </div>
+                <button type="submit" id="login-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.5rem] font-black uppercase shadow-2xl hover:brightness-110 active:scale-95 transition-all tracking-[0.3em] mt-6 border border-white/10">SİSTEME GİRİŞ YAP</button>
             </form>
-            <div id="login-error" class="mt-6 p-4 bg-red-500/10 text-red-500 text-xs font-bold rounded-2xl border border-red-500/20 hidden"></div>
+            <div id="login-error" class="mt-6 p-4 bg-red-500/10 text-red-500 text-xs font-bold rounded-2xl border border-red-500/20 hidden uppercase tracking-widest"></div>
         </div>
     </div>
 
-    <!-- ANA PLATFORM -->
+    <!-- ANA UYGULAMA PANELİ -->
     <div id="app" class="hidden min-h-screen flex flex-col md:flex-row overflow-hidden relative z-10">
-        <!-- Sidebar -->
-        <aside class="w-full md:w-72 glass-card border-r border-white/5 flex flex-col h-screen shrink-0 relative z-[1001]">
-            <div class="p-10 text-center h-32 flex items-center justify-center"></div>
-            <nav class="flex-1 px-4 py-4 space-y-3 overflow-y-auto custom-scrollbar" id="sidebar-nav"></nav>
-            <div class="p-6 border-t border-white/5">
-                <div class="flex items-center gap-3 mb-6 px-3">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shadow-inner border border-white/10" id="user-avatar">?</div>
-                    <div class="overflow-hidden"><p class="text-sm font-black text-white truncate" id="user-name-display">...</p><p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Öğrenci</p></div>
+        
+        <!-- SIDEBAR -->
+        <aside class="w-full md:w-80 glass-card border-r border-white/5 flex flex-col h-screen shrink-0 relative z-[1001]">
+            <div class="p-12 text-center h-40 flex items-center justify-center"></div>
+            
+            <nav class="flex-1 px-5 py-4 space-y-3 overflow-y-auto custom-scrollbar" id="sidebar-nav"></nav>
+            
+            <div class="p-8 border-t border-white/5">
+                <div class="flex items-center gap-4 mb-8 px-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-2xl shadow-2xl border border-white/20" id="user-avatar">?</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-black text-white truncate drop-shadow-md" id="user-name-display">...</p>
+                        <p class="text-[9px] font-bold uppercase text-slate-500 tracking-[0.3em]">Aktif Öğrenci</p>
+                    </div>
                 </div>
-                <button onclick="logout()" class="w-full py-4 text-red-500 hover:bg-red-500/10 rounded-2xl font-black text-[10px] uppercase transition border border-red-500/10 tracking-[0.2em]">Oturumu Kapat</button>
+                <button onclick="logout()" class="w-full py-5 text-red-500 hover:bg-red-500/10 rounded-[2rem] font-black text-[10px] uppercase transition border border-red-500/10 tracking-[0.25em] shadow-lg">
+                    <i class="fa-solid fa-power-off mr-2 text-sm"></i> Oturumu Kapat
+                </button>
             </div>
         </aside>
 
-        <!-- İçerik Alanı -->
+        <!-- İÇERİK MOTORU -->
         <main class="flex-1 h-screen overflow-y-auto custom-scrollbar flex flex-col relative" id="main-scroll-area">
-            <header class="p-6 md:px-12 md:pt-16 flex justify-between items-center h-32 shrink-0" id="main-header">
-                <div>
-                    <h1 class="text-3xl md:text-5xl font-black text-white italic uppercase tracking-tighter drop-shadow-2xl" id="page-title">...</h1>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-2 italic" id="page-subtitle">MATOTA Eğitim Paneli</p>
+            <header class="p-8 md:px-16 md:pt-20 flex justify-between items-center h-40 shrink-0" id="main-header">
+                <div class="animate__animated animate__fadeInLeft">
+                    <h1 class="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter drop-shadow-2xl" id="page-title">...</h1>
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.5em] mt-3 italic" id="page-subtitle">MATOTA Digital Dashboard</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="px-6 py-3 liquid-inner border border-white/10 rounded-2xl font-black text-xs text-blue-400 shadow-2xl hidden lg:block">
-                        BAŞARI PUANI: <span id="header-score" class="text-white ml-2 text-base font-black">0</span>
+                <div class="flex items-center gap-6 animate__animated animate__fadeInRight">
+                    <div class="hidden xl:flex flex-col text-right mr-4 border-r border-white/10 pr-6">
+                        <span id="live-timer" class="text-lg font-black text-white tracking-widest uppercase">00:00:00</span>
+                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Sistem Saati</span>
                     </div>
-                    <button onclick="navigate('dashboard')" class="w-14 h-14 flex items-center justify-center glass-card rounded-2xl shadow-xl hover:text-blue-500 transition-all"><i class="fa-solid fa-house"></i></button>
+                    <div class="px-8 py-4 liquid-inner border border-white/10 rounded-3xl font-black text-xs text-blue-400 shadow-2xl hidden lg:block text-center min-w-[180px]">
+                        BAŞARI SKORU <br> <span id="header-score-val" class="text-white text-2xl font-black">0</span>
+                    </div>
+                    <button onclick="navigate('dashboard')" class="w-16 h-16 flex items-center justify-center glass-card rounded-2xl shadow-2xl hover:text-blue-500 transition-all border border-white/10">
+                        <i class="fa-solid fa-house-chimney text-xl"></i>
+                    </button>
                 </div>
             </header>
             
-            <div id="view-content" class="w-full flex-1 px-6 md:px-12 pb-12 max-w-7xl mx-auto view-fade"></div>
+            <div id="view-content" class="w-full flex-1 px-8 md:px-16 pb-16 max-w-7xl mx-auto view-fade-up"></div>
         </main>
     </div>
 
-    <!-- MODALLAR (EKSİKSİZ MOTORLAR) -->
-    
-    <!-- PDF Görüntüleyici -->
-    <div id="pdf-viewer-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl hidden items-center justify-center p-4 z-[5000]">
-        <div class="w-full max-w-6xl h-[90vh] glass-card rounded-[3rem] shadow-2xl flex flex-col overflow-hidden relative border border-white/10">
-            <div class="p-5 border-b border-white/10 flex justify-between items-center liquid-inner">
-                <h3 class="font-black text-white uppercase italic text-sm" id="pdf-title">Modern Belge Önizleme</h3>
-                <button onclick="closePdfViewer()" class="w-12 h-12 liquid-inner rounded-full flex items-center justify-center text-white hover:bg-red-500/20 transition-all shadow-lg"><i class="fa-solid fa-xmark"></i></button>
+    <!-- MODAL LABORATUVARI (PDF, ÖDEV, ANALİZ) -->
+
+    <!-- 1. PDF Görüntüleyici -->
+    <div id="pdf-viewer-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-3xl hidden items-center justify-center p-4 sm:p-12 z-[5000]">
+        <div class="w-full max-w-6xl h-[92vh] glass-card rounded-[4rem] shadow-2xl flex flex-col overflow-hidden relative border border-white/20 animate__animated animate__zoomIn animate__faster">
+            <div class="p-8 border-b border-white/10 flex justify-between items-center liquid-inner">
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-file-pdf text-red-500 text-3xl"></i>
+                    <h3 class="font-black text-white uppercase italic tracking-widest text-lg" id="pdf-title">Modern Belge Laboratuvarı</h3>
+                </div>
+                <button onclick="closePdfViewer()" class="w-14 h-14 liquid-inner rounded-full flex items-center justify-center text-white hover:bg-red-500/20 transition-all shadow-xl"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
             <iframe id="pdf-iframe" src="" class="flex-1 w-full bg-slate-900 border-0"></iframe>
         </div>
     </div>
 
-    <!-- Ödev Yükleme Motoru -->
-    <div id="homework-upload-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl hidden items-center justify-center p-6 z-[5000]">
-        <div class="max-w-xl w-full glass-card p-10 rounded-[4rem] shadow-2xl border border-white/10 animate__animated animate__fadeInUp">
-            <button onclick="closeUploadModal()" class="absolute top-8 right-8 text-slate-500 hover:text-white transition transform hover:rotate-90"><i class="fa-solid fa-xmark text-2xl"></i></button>
-            <h3 class="text-3xl font-black mb-2 italic uppercase text-white tracking-tighter">Çözüm İlet</h3>
-            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-10 border-b border-white/5 pb-4">Emeğini teknolojik bir kayda dönüştür</p>
+    <!-- 2. Ödev Yükleme Motoru -->
+    <div id="homework-upload-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-2xl hidden items-center justify-center p-6 z-[5000]">
+        <div class="max-w-2xl w-full glass-card p-12 rounded-[4rem] shadow-2xl border border-white/15 animate__animated animate__fadeInUp animate__faster">
+            <button onclick="closeUploadModal()" class="absolute top-10 right-10 text-slate-500 hover:text-white transition transform hover:rotate-90"><i class="fa-solid fa-xmark text-3xl"></i></button>
+            <div class="mb-10 text-center">
+                <h3 class="text-4xl font-black mb-3 italic uppercase text-white tracking-tighter drop-shadow-2xl">Çözüm İlet</h3>
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.4em]">Emeğini teknolojik bir veriye dönüştür</p>
+            </div>
             <form onsubmit="window.submitHomework(event)" class="space-y-6">
                 <input type="hidden" id="upload-hw-id">
-                <div id="upload-file-list" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
-                <button type="button" onclick="document.getElementById('hw-file-input').click()" class="w-full p-12 border-2 border-dashed border-blue-500/30 rounded-[3rem] text-blue-500 font-black uppercase text-[10px] hover:bg-blue-500/5 transition-all group">
-                    <i class="fa-solid fa-cloud-arrow-up text-4xl mb-4 block group-hover:scale-110 transition-transform"></i>
-                    Çözüm Fotoğraflarını Seç
+                <div id="upload-file-list" class="space-y-3 max-h-52 overflow-y-auto custom-scrollbar pr-2"></div>
+                <button type="button" onclick="document.getElementById('hw-file-input').click()" class="w-full p-16 border-2 border-dashed border-blue-500/30 rounded-[3rem] text-blue-500 font-black uppercase text-xs liquid-inner hover:bg-blue-500/5 transition-all group flex flex-col items-center">
+                    <i class="fa-solid fa-cloud-arrow-up text-5xl mb-6 block group-hover:scale-110 transition-transform duration-500"></i>
+                    <span>Çözüm Fotoğraflarını Buraya Mühürle</span>
                 </button>
                 <input type="file" id="hw-file-input" class="hidden" multiple accept="image/*" onchange="window.handleHwFiles(this)">
-                <textarea id="upload-note" placeholder="Hocam merhaba, bu ödevde özellikle..." class="w-full p-6 rounded-3xl liquid-inner outline-none text-white h-40 border border-white/5 focus:border-blue-500 transition-all font-medium text-sm"></textarea>
-                <button type="submit" id="upload-submit-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.5rem] font-black uppercase shadow-2xl hover:brightness-110 transition-all tracking-[0.4em] text-sm">Bitir ve Gönder</button>
+                <textarea id="upload-note" placeholder="Hocam merhaba, bu ödevde takıldığım yerler..." class="w-full p-8 rounded-[2rem] liquid-inner outline-none text-white h-44 border border-white/5 focus:border-blue-500 transition-all font-medium text-sm shadow-inner"></textarea>
+                <button type="submit" id="upload-submit-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.5rem] font-black uppercase shadow-2xl hover:brightness-110 transition-all tracking-[0.5em] text-sm border border-white/10">GÖNDERİMİ TAMAMLA</button>
             </form>
         </div>
     </div>
 
-    <!-- Analiz Detay Laboratuvarı -->
-    <div id="analysis-detail-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-3xl hidden items-center justify-center p-4 z-[5000]">
-        <div class="w-full max-w-7xl h-[92vh] glass-card rounded-[4rem] shadow-2xl flex flex-col overflow-hidden border border-white/10 animate__animated animate__zoomIn">
-            <div class="p-10 border-b border-white/10 flex justify-between items-center liquid-inner shrink-0">
+    <!-- 3. Analiz Detay Laboratuvarı -->
+    <div id="analysis-detail-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-3xl hidden items-center justify-center p-4 z-[5000]">
+        <div class="w-full max-w-7xl h-[94vh] glass-card rounded-[4rem] shadow-2xl flex flex-col overflow-hidden border border-white/10 animate__animated animate__zoomIn">
+            <div class="p-12 border-b border-white/10 flex justify-between items-center liquid-inner shrink-0 shadow-2xl">
                 <div>
-                    <h3 class="text-3xl font-black text-white uppercase italic tracking-tighter" id="analysis-title">Modern Analiz Raporu</h3>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-2">Soru Bazlı Gelişim Karnesi</p>
+                    <h3 class="text-4xl font-black text-white uppercase italic tracking-tighter" id="analysis-title">Detaylı Rapor</h3>
+                    <p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.5em] mt-3">Bilimsel Başarı Veritabanı</p>
                 </div>
-                <button onclick="closeAnalysisModal()" class="w-14 h-14 liquid-inner rounded-full flex items-center justify-center text-white hover:bg-white/10 transition shadow-lg"><i class="fa-solid fa-xmark text-2xl"></i></button>
+                <button onclick="closeAnalysisModal()" class="w-16 h-16 liquid-inner rounded-full flex items-center justify-center text-white hover:bg-white/10 transition shadow-2xl"><i class="fa-solid fa-xmark text-3xl"></i></button>
             </div>
-            <div id="analysis-content" class="flex-1 overflow-y-auto p-12 custom-scrollbar"></div>
+            <div id="analysis-content" class="flex-1 overflow-y-auto p-12 custom-scrollbar bg-black/20"></div>
         </div>
     </div>
 
-    <!-- Sınav Kod Popup -->
-    <div id="exam-code-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-2xl hidden items-center justify-center p-4 z-[5000]">
-        <div class="max-w-md w-full glass-card p-12 rounded-[3.5rem] shadow-2xl text-center border border-white/10 animate__animated animate__bounceIn">
-            <div class="w-20 h-20 bg-orange-600/10 text-orange-500 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-3xl shadow-inner border border-orange-500/20"><i class="fa-solid fa-key"></i></div>
-            <h3 class="text-2xl font-black mb-4 text-white uppercase italic tracking-tighter">Sınav Giriş Kodu</h3>
-            <p class="text-xs text-slate-500 font-bold mb-8 leading-relaxed">Aşağıdaki benzersiz kodu kopyalayarak sınav sistemine güvenli bir şekilde mühürlenebilirsin.</p>
-            <div class="liquid-inner p-8 rounded-3xl mb-10 border border-white/10 shadow-inner group">
-                <span id="exam-code-display" class="text-5xl font-mono font-black tracking-[0.4em] text-blue-500 group-hover:text-white transition-colors duration-500"></span>
+    <!-- 4. Sınav Kod Popup -->
+    <div id="exam-code-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-3xl hidden items-center justify-center p-4 z-[5000]">
+        <div class="max-w-md w-full glass-card p-12 rounded-[4rem] shadow-2xl text-center border border-white/10 animate__animated animate__bounceIn">
+            <div class="w-24 h-24 bg-orange-600/10 text-orange-500 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 text-4xl shadow-inner border border-orange-500/20 animate-pulse"><i class="fa-solid fa-key"></i></div>
+            <h3 class="text-3xl font-black mb-4 text-white uppercase italic tracking-tighter">Sınav Giriş Kodu</h3>
+            <p class="text-sm text-slate-500 font-bold mb-10 leading-relaxed px-4">Aşağıdaki benzersiz kodu kopyalayarak sınav sistemine güvenli bir şekilde mühürlenebilirsin.</p>
+            <div class="liquid-inner p-10 rounded-[2.5rem] mb-12 border border-white/10 shadow-inner group">
+                <span id="exam-code-display" class="text-5xl font-mono font-black tracking-[0.5em] text-blue-500 group-hover:text-white transition-colors duration-500"></span>
             </div>
-            <button id="copy-exam-link-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2rem] font-black uppercase shadow-2xl hover:brightness-110 active:scale-95 transition-all tracking-[0.2em] flex items-center justify-center gap-3">
+            <button id="copy-exam-link-btn" class="w-full bg-blue-600 text-white py-7 rounded-[2.5rem] font-black uppercase shadow-2xl hover:brightness-110 active:scale-95 transition-all tracking-[0.3em] flex items-center justify-center gap-4 text-sm">
                 <i class="fa-solid fa-paper-plane"></i> KODU KOPYALA VE GİT
             </button>
-            <button onclick="closeExamCodeModal()" class="mt-6 text-[10px] font-black uppercase text-slate-500 tracking-widest hover:text-white transition-colors">Kapat</button>
+            <button onclick="closeExamCodeModal()" class="mt-8 text-[11px] font-black uppercase text-slate-500 tracking-[0.3em] hover:text-white transition-colors">Kapat</button>
         </div>
     </div>
 
-    <!-- Video Yorumları -->
+    <!-- 5. Video Yorumları -->
     <div id="video-comments-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xl hidden items-center justify-center p-4 z-[5000]">
-        <div class="w-full max-w-lg glass-card rounded-[3.5rem] shadow-2xl flex flex-col h-[75vh] border border-white/10 animate__animated animate__slideInRight">
-            <div class="p-8 border-b border-white/5 flex justify-between items-center shrink-0">
-                <h3 class="text-xl font-black italic uppercase text-white tracking-widest"><i class="fa-solid fa-comments text-blue-500 mr-3"></i>Görüşler</h3>
-                <button onclick="closeVideoComments()" class="text-slate-500 hover:text-white transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
+        <div class="w-full max-w-lg glass-card rounded-[4rem] shadow-2xl flex flex-col h-[80vh] border border-white/10 animate__animated animate__slideInRight">
+            <div class="p-10 border-b border-white/5 flex justify-between items-center shrink-0">
+                <h3 class="text-2xl font-black italic uppercase text-white tracking-widest"><i class="fa-solid fa-comments text-blue-500 mr-4"></i>Yorumlar</h3>
+                <button onclick="closeVideoComments()" class="text-slate-500 hover:text-white transition"><i class="fa-solid fa-xmark text-3xl"></i></button>
             </div>
-            <div id="comments-list-container" class="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6"></div>
-            <div class="p-6 border-t border-white/5 liquid-inner m-4 rounded-[2.5rem]">
-                <form onsubmit="window.submitVideoComment(event)" class="flex gap-4">
+            <div id="comments-list-container" class="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-8"></div>
+            <div class="p-8 border-t border-white/5 liquid-inner m-6 rounded-[3rem]">
+                <form onsubmit="window.submitVideoComment(event)" class="flex gap-5">
                     <input type="hidden" id="comment-video-id">
-                    <input type="text" id="comment-input" placeholder="Bu video hakkındaki düşüncen..." class="flex-1 bg-transparent outline-none text-sm font-bold text-white" required>
-                    <button type="submit" class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
+                    <input type="text" id="comment-input" placeholder="Düşüncelerini paylaş..." class="flex-1 bg-transparent outline-none text-sm font-bold text-white placeholder-slate-600" required>
+                    <button type="submit" class="w-14 h-14 bg-blue-600 text-white rounded-3xl flex items-center justify-center shadow-2xl hover:scale-110 transition-all"><i class="fa-solid fa-paper-plane text-lg"></i></button>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        // --- SUPABASE & STATE ---
+        // --- SUPABASE & PLATFORM STATE ---
         const SUPABASE_URL = "https://tnhofdyonpbmozqzimzj.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_xVFfpA85IjnCqIjEJWvtvQ_VZCH_n60"; 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -258,7 +293,7 @@
         let userProfile = null, selectedFiles = [], reelsObserver = null;
         let isMuted = false;
 
-        // --- CORE UI & AUTH ---
+        // --- CORE UI & AUTH MOTORU ---
         async function initAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
@@ -268,6 +303,7 @@
                     document.getElementById('user-name-display').innerText = data.full_name;
                     document.getElementById('user-avatar').innerText = data.full_name[0].toUpperCase();
                     document.getElementById('app').classList.remove('hidden'); document.getElementById('app').classList.add('flex');
+                    document.getElementById('login-overlay').classList.add('hidden');
                     renderSidebar(); navigate(localStorage.getItem('lastView') || 'dashboard');
                     window.startHeartbeat();
                 } else { logout(); }
@@ -276,9 +312,9 @@
         }
 
         async function handleLogin(e) {
-            e.preventDefault(); const btn = document.getElementById('login-btn'); btn.disabled = true; btn.innerText = "Doğrulanıyor...";
+            e.preventDefault(); const btn = document.getElementById('login-btn'); btn.disabled = true; btn.innerText = "DOGRULANIYOR...";
             const { error } = await supabaseClient.auth.signInWithPassword({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value });
-            if (error) { document.getElementById('login-error').innerText = "Giriş Hatası: " + error.message; document.getElementById('login-error').classList.remove('hidden'); btn.disabled = false; btn.innerText = "Portala Bağlan"; } 
+            if (error) { document.getElementById('login-error').innerText = "Giriş Hatası: " + error.message; document.getElementById('login-error').classList.remove('hidden'); btn.disabled = false; btn.innerText = "SİSTEME BAĞLAN"; } 
             else { location.reload(); }
         }
 
@@ -287,12 +323,18 @@
         window.startHeartbeat = () => {
             const up = async () => { if(userProfile) await supabaseClient.from('profiles').update({ last_seen: new Date().toISOString() }).eq('id', userProfile.id); };
             up(); setInterval(up, 60000);
+            setInterval(() => { document.getElementById('live-timer').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
         };
 
-        // --- NAVİGASYON ---
+        // --- NAVİGASYON MOTORU ---
         function renderSidebar() {
-            const items = [{id:'dashboard',n:'Dashboard',i:'fa-chart-line'},{id:'s-lessons',n:'Derslerim',i:'fa-video'},{id:'s-exams',n:'Sınavlarım',i:'fa-file-signature'},{id:'s-homeworks',n:'Ödevlerim',i:'fa-book-open-reader'},{id:'s-files',n:'Dosyalarım',i:'fa-folder-open'},{id:'s-videos',n:'Kısa Videolar',i:'fa-play-circle'},{id:'s-analytics',n:'Analizlerim',i:'fa-chart-pie'}];
-            document.getElementById('sidebar-nav').innerHTML = items.map(x => `<button onclick="navigate('${x.id}')" id="nav-${x.id}" class="sidebar-link w-full flex items-center space-x-5 px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest transition hover:bg-white/5"><i class="fa-solid ${x.i} text-xl w-8 text-center"></i><span>${x.n}</span></button>`).join('');
+            const items = [{id:'dashboard',n:'Dashboard',i:'fa-chart-line'},{id:'s-lessons',n:'Ders Programı',i:'fa-video'},{id:'s-exams',n:'Sınav Merkezi',i:'fa-file-signature'},{id:'s-homeworks',n:'Ödev Takibi',i:'fa-book-open-reader'},{id:'s-files',n:'Ders Arşivi',i:'fa-folder-open'},{id:'s-videos',n:'Modern Reels',i:'fa-play-circle'},{id:'s-analytics',n:'Başarı Analizi',i:'fa-chart-pie'}];
+            document.getElementById('sidebar-nav').innerHTML = items.map(x => `
+                <button onclick="navigate('${x.id}')" id="nav-${x.id}" class="sidebar-link w-full flex items-center space-x-5 px-10 py-6 rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.25em] transition hover:bg-white/5 group relative">
+                    <i class="fa-solid ${x.i} text-xl w-10 text-center group-hover:scale-125 transition-transform duration-500"></i>
+                    <span>${x.n}</span>
+                </button>
+            `).join('');
         }
 
         async function navigate(v) {
@@ -303,10 +345,10 @@
             const header = document.getElementById('main-header');
             const scrollArea = document.getElementById('main-scroll-area');
             
-            cont.innerHTML = '<div class="p-32 flex justify-center items-center flex-col animate__animated animate__fadeIn"><i class="fa-solid fa-atom fa-spin text-6xl text-blue-600 mb-6"></i><p class="font-black uppercase tracking-[0.4em] text-[10px] opacity-40">Modern Veriler Yükleniyor</p></div>';
+            cont.innerHTML = '<div class="p-40 flex justify-center items-center flex-col animate__animated animate__fadeIn"><i class="fa-solid fa-atom fa-spin text-7xl text-blue-600 mb-10"></i><p class="font-black uppercase tracking-[0.6em] text-xs opacity-40">Veri Hub Bağlantısı</p></div>';
             
-            if(v === 's-videos') { header.classList.add('hidden'); scrollArea.classList.add('overflow-hidden'); scrollArea.classList.remove('overflow-y-auto'); cont.classList.remove('px-6', 'md:px-12', 'max-w-7xl'); cont.classList.add('p-0', 'max-w-full'); }
-            else { header.classList.remove('hidden'); scrollArea.classList.add('overflow-y-auto'); scrollArea.classList.remove('overflow-hidden'); cont.classList.add('px-6', 'md:px-12', 'max-w-7xl'); cont.classList.remove('p-0', 'max-w-full'); if(reelsObserver) reelsObserver.disconnect(); }
+            if(v === 's-videos') { header.classList.add('hidden'); scrollArea.classList.add('overflow-hidden'); scrollArea.classList.remove('overflow-y-auto'); cont.classList.remove('px-8', 'md:px-16', 'max-w-7xl'); cont.classList.add('p-0', 'max-w-full'); }
+            else { header.classList.remove('hidden'); scrollArea.classList.add('overflow-y-auto'); scrollArea.classList.remove('overflow-hidden'); cont.classList.add('px-8', 'md:px-16', 'max-w-7xl'); cont.classList.remove('p-0', 'max-w-full'); if(reelsObserver) reelsObserver.disconnect(); }
 
             if(v === 'dashboard') await renderDashboard();
             else if(v === 's-lessons') await renderLessons();
@@ -317,103 +359,127 @@
             else if(v === 's-analytics') await renderAnalytics();
         }
 
-        // --- DASHBOARD (MEGA) ---
+        // --- MODÜL: DASHBOARD (MEGA) ---
         async function renderDashboard() {
             document.getElementById('page-title').innerText = 'Dashboard';
-            const { data: points } = await supabaseClient.from('points').select('amount').eq('student_id', userProfile.id);
-            const total = (points || []).reduce((a, b) => a + b.amount, 0);
-            document.getElementById('header-score').innerText = total;
+            document.getElementById('page-subtitle').innerText = 'Modern Başarı Takip Sistemi';
 
-            const { data: nextLesson } = await supabaseClient.from('lessons').select('*').eq('student_id', userProfile.id).neq('is_completed', true).order('scheduled_at').limit(1).maybeSingle();
-            const { data: hws } = await supabaseClient.from('homeworks').select('id').eq('student_id', userProfile.id).neq('is_completed', true);
+            const { data: points } = await supabaseClient.from('points').select('amount').eq('student_id', userProfile.id);
+            const totalP = (points || []).reduce((a, b) => a + b.amount, 0);
+            document.getElementById('header-score-val').innerText = totalP;
+
+            const { data: nextLesson } = await supabaseClient.from('lessons').select('*').eq('student_id', userProfile.id).neq('is_completed', true).gte('scheduled_at', new Date().toISOString()).order('scheduled_at').limit(1).maybeSingle();
+            const { data: activeHws } = await supabaseClient.from('homeworks').select('id').eq('student_id', userProfile.id).neq('is_completed', true).gte('deadline', new Date().toISOString());
             const { data: lastFile } = await supabaseClient.from('course_files').select('*').or(`student_id.is.null,student_id.eq.${userProfile.id}`).order('created_at', {ascending: false}).limit(1).maybeSingle();
 
             document.getElementById('view-content').innerHTML = `
-                <div class="grid lg:grid-cols-12 gap-10">
-                    <div class="lg:col-span-4 bg-blue-600 p-12 rounded-[4rem] text-white shadow-2xl flex flex-col items-center justify-center relative overflow-hidden group">
-                        <span class="text-[10px] uppercase font-black opacity-70 mb-4 tracking-[0.5em]">Gelişim Skoru</span>
-                        <h2 class="text-9xl font-black leading-none drop-shadow-2xl animate__animated animate__pulse animate__infinite">${total}</h2>
-                        <i class="fa-solid fa-bolt absolute -right-6 -bottom-6 text-[10rem] opacity-10 group-hover:rotate-12 transition-all"></i>
+                <div class="grid lg:grid-cols-12 gap-12 animate__animated animate__fadeInUp">
+                    <div class="lg:col-span-4 bg-gradient-to-br from-blue-600 to-blue-950 p-16 rounded-[4.5rem] text-white shadow-2xl flex flex-col items-center justify-center relative overflow-hidden group">
+                        <span class="text-[11px] uppercase font-black opacity-70 mb-6 tracking-[0.6em]">Akademik Puan</span>
+                        <h2 class="text-[14rem] font-black leading-none drop-shadow-2xl animate__animated animate__pulse animate__infinite">${totalP}</h2>
+                        <i class="fa-solid fa-crown absolute -right-6 -bottom-6 text-[15rem] opacity-10 group-hover:rotate-12 transition-all duration-1000"></i>
                     </div>
-                    <div class="lg:col-span-8 grid md:grid-cols-2 gap-8">
-                        <div class="glass-card p-10 rounded-[3rem] border-l-4 border-l-orange-500 flex flex-col justify-center">
-                            <h4 class="text-xs font-black uppercase text-slate-500 mb-6 italic tracking-widest">Sıradaki Oturum</h4>
-                            ${nextLesson ? `<div><h3 class="text-3xl font-black text-white italic uppercase mb-2">${nextLesson.title}</h3><p class="text-xs font-bold text-orange-500 uppercase tracking-widest">${new Date(nextLesson.scheduled_at).toLocaleString('tr-TR')}</p></div>` : '<p class="opacity-40 italic font-black text-xs uppercase">Planlı oturum bulunmuyor.</p>'}
+                    <div class="lg:col-span-8 grid md:grid-cols-2 gap-10">
+                        <div class="glass-card p-12 rounded-[3.5rem] border-l-8 border-l-orange-500 flex flex-col justify-center min-h-[250px]">
+                            <h4 class="text-[10px] font-black uppercase text-slate-500 mb-6 italic tracking-[0.4em]">Sıradaki Oturum</h4>
+                            ${nextLesson ? `<div><h3 class="text-4xl font-black text-white italic uppercase mb-4 leading-tight">${nextLesson.title}</h3><p class="text-sm font-bold text-orange-500 uppercase tracking-[0.2em]"><i class="fa-regular fa-clock mr-2"></i>${new Date(nextLesson.scheduled_at).toLocaleString('tr-TR')}</p></div>` : '<p class="opacity-40 italic font-black uppercase text-xs">Bekleyen oturum yok.</p>'}
                         </div>
-                        <div class="glass-card p-10 rounded-[3rem] border-l-4 border-l-blue-500 flex items-center justify-between">
-                            <div><h4 class="text-xs font-black uppercase text-slate-500 mb-2">Aktif Görevler</h4><p class="text-white font-black text-4xl italic">${hws?.length || 0} Bekleyen Ödev</p></div>
-                            <i class="fa-solid fa-list-check text-5xl text-blue-500 opacity-20"></i>
-                        </div>
-                        <div class="glass-card p-10 rounded-[3rem] md:col-span-2 border-l-4 border-l-purple-500 flex items-center justify-between">
-                            <div class="flex-1">
-                                <h4 class="text-xs font-black uppercase text-slate-500 mb-6 italic tracking-widest">Kütüphaneye Eklenen Son Belge</h4>
-                                ${lastFile ? `<div class="flex items-center gap-4"><div class="w-12 h-12 liquid-inner flex items-center justify-center text-red-500 text-xl rounded-xl"><i class="fa-solid fa-file-pdf"></i></div><p class="font-bold text-white uppercase text-sm">${lastFile.title}</p></div>` : '<p class="opacity-40 italic font-black text-xs uppercase">Belge bulunmuyor.</p>'}
+                        <div class="glass-card p-12 rounded-[3.5rem] border-l-8 border-l-blue-500 flex flex-col justify-center min-h-[250px]">
+                            <h4 class="text-[10px] font-black uppercase text-slate-500 mb-6 italic tracking-[0.4em]">Aktif Ödevler</h4>
+                            <div class="flex items-center justify-between">
+                                <p class="text-white font-black text-6xl italic drop-shadow-lg">${activeHws?.length || 0}</p>
+                                <i class="fa-solid fa-list-check text-5xl text-blue-500 opacity-20"></i>
                             </div>
-                            <button onclick="navigate('s-files')" class="px-8 py-4 bg-white/5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all border border-white/5">Arşivi Aç</button>
+                        </div>
+                        <div class="glass-card p-12 rounded-[3.5rem] md:col-span-2 border-l-8 border-l-purple-500 flex items-center justify-between min-h-[200px]">
+                            <div>
+                                <h4 class="text-[10px] font-black uppercase text-slate-500 mb-6 italic tracking-[0.4em]">Kütüphaneye Eklenen Son Belge</h4>
+                                ${lastFile ? `<div class="flex items-center gap-6"><div class="w-16 h-16 liquid-inner flex items-center justify-center text-red-500 text-3xl rounded-2xl shadow-inner border border-white/10"><i class="fa-solid fa-file-pdf"></i></div><p class="font-black text-white uppercase text-lg italic tracking-tighter">${lastFile.title}</p></div>` : '<p class="opacity-40 italic font-black uppercase text-xs">Dosya bulunmuyor.</p>'}
+                            </div>
+                            <button onclick="navigate('s-files')" class="px-10 py-5 bg-white/5 rounded-3xl font-black text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all border border-white/5 shadow-2xl">Arşive Git</button>
                         </div>
                     </div>
                 </div>`;
         }
 
-        // --- DERSLER (ARŞİVLEMELİ) ---
+        // --- MODÜL: DERSLERİM ---
         async function renderLessons() {
             document.getElementById('page-title').innerText = 'Ders Programı';
+            document.getElementById('page-subtitle').innerText = 'Aktif ve Geçmiş Online Oturumlar';
+
             const { data } = await supabaseClient.from('lessons').select('*').eq('student_id', userProfile.id).order('scheduled_at', {ascending: true});
             const now = new Date();
             const active = (data||[]).filter(l => !l.is_completed && new Date(l.scheduled_at) > new Date(now.getTime() - 120 * 60000));
             const past = (data||[]).filter(l => l.is_completed || new Date(l.scheduled_at) <= new Date(now.getTime() - 120 * 60000));
 
+            const card = l => `
+                <div class="glass-card p-12 rounded-[4rem] h-[450px] flex flex-col justify-between group relative overflow-hidden transition-all duration-700">
+                    <div class="absolute -top-10 -right-10 w-48 h-48 bg-blue-600/5 rounded-full group-hover:scale-125 transition-all duration-1000"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 rounded-2xl liquid-inner flex items-center justify-center text-blue-500 text-3xl border border-blue-500/20 shadow-inner group-hover:rotate-12 transition-all"><i class="fa-solid fa-video"></i></div>
+                        <h4 class="text-3xl font-black text-white italic uppercase mb-4 mt-10 leading-tight tracking-tighter">${l.title}</h4>
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-[0.3em] italic"><i class="fa-regular fa-calendar-check mr-2 text-blue-500"></i>${new Date(l.scheduled_at).toLocaleString('tr-TR')}</p>
+                    </div>
+                    <a href="${l.link}" target="_blank" class="w-full py-6 bg-blue-600 text-white rounded-[2.5rem] font-black text-center shadow-2xl tracking-[0.4em] hover:brightness-110 active:scale-95 transition-all text-xs border border-white/10 uppercase relative z-10">OTURUMA KATIL</a>
+                </div>`;
+
             document.getElementById('view-content').innerHTML = `
-                <div class="space-y-16">
+                <div class="space-y-20">
                     <div>
-                        <h3 class="text-[10px] font-black uppercase text-blue-500 mb-8 italic tracking-[0.5em] flex items-center gap-4"><span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span> Aktif ve Yaklaşan Oturumlar</h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                            ${active.map(l => `
-                                <div class="glass-card p-10 rounded-[3.5rem] h-96 flex flex-col justify-between group">
-                                    <div class="w-14 h-14 rounded-2xl liquid-inner flex items-center justify-center text-blue-500 text-2xl border border-blue-500/20 shadow-inner group-hover:scale-110 transition"><i class="fa-solid fa-video"></i></div>
-                                    <div><h4 class="text-3xl font-black text-white italic uppercase mb-2 leading-tight">${l.title}</h4><p class="text-xs font-bold text-slate-500 uppercase tracking-widest">${new Date(l.scheduled_at).toLocaleString('tr-TR')}</p></div>
-                                    <a href="${l.link}" target="_blank" class="w-full py-5 bg-blue-600 text-white rounded-[2rem] font-black text-center shadow-2xl tracking-[0.3em] hover:brightness-110 active:scale-95 transition-all text-xs border border-white/10 uppercase">Oturuma Katıl</a>
-                                </div>
-                            `).join('') || '<div class="col-span-full py-20 text-center opacity-30 font-black uppercase italic tracking-widest border-2 border-dashed border-white/5 rounded-3xl">Planlı oturum yok.</div>'}
+                        <h3 class="text-[11px] font-black uppercase text-blue-500 mb-12 italic tracking-[0.6em] flex items-center gap-6"><span class="w-3 h-3 rounded-full bg-blue-500 animate-ping"></span> Aktif Planlı Oturumlar</h3>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                            ${active.map(l => card(l)).join('') || '<p class="opacity-30 italic font-black uppercase text-center col-span-full py-32 border-2 border-dashed border-white/5 rounded-[4rem]">Bekleyen ders bulunmuyor.</p>'}
                         </div>
                     </div>
-                    <div class="pt-16 border-t border-white/5">
-                        <h3 class="text-[10px] font-black uppercase text-slate-500 mb-8 italic tracking-[0.5em] opacity-50"><i class="fa-solid fa-archive mr-2 text-sm"></i> Arşivlenmiş Oturumlar</h3>
-                        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8 opacity-60">
-                            ${past.map(l => `<div class="glass-card p-8 rounded-[2.5rem] grayscale h-48 flex flex-col justify-between"><div><h4 class="font-black text-white uppercase italic text-sm mb-1 line-clamp-2">${l.title}</h4><p class="text-[9px] font-bold text-slate-500">${new Date(l.scheduled_at).toLocaleDateString('tr-TR')}</p></div><span class="text-[8px] font-black text-green-500 uppercase tracking-widest border border-green-500/20 px-3 py-1 rounded-full w-fit bg-green-500/5">TAMAMLANDI</span></div>`).join('') || '<p class="opacity-30 italic font-black uppercase text-[10px] py-10">Arşiv boş.</p>'}
+                    <div class="pt-20 border-t border-white/5 opacity-50">
+                        <h3 class="text-[11px] font-black uppercase text-slate-500 mb-12 italic tracking-[0.6em]"><i class="fa-solid fa-archive mr-3"></i> Arşivlenmiş Ders Kayıtları</h3>
+                        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+                            ${past.map(l => `
+                                <div class="glass-card p-10 rounded-[3rem] grayscale h-60 flex flex-col justify-between hover:grayscale-0 transition-all duration-700">
+                                    <div><h4 class="font-black text-white uppercase italic text-sm mb-2 line-clamp-2">${l.title}</h4><p class="text-[10px] font-bold text-slate-500">${new Date(l.scheduled_at).toLocaleDateString('tr-TR')}</p></div>
+                                    <span class="text-[9px] font-black text-green-500 uppercase tracking-widest border border-green-500/20 px-5 py-2 rounded-full w-fit bg-green-500/5">OTURUM TAMAMLANDI</span>
+                                </div>`).join('') || '<p class="opacity-30 font-black uppercase text-[10px] py-10">Arşiv tertemiz.</p>'}
                         </div>
                     </div>
                 </div>`;
         }
 
-        // --- SINAVLAR (ARŞİVLEMELİ) ---
+        // --- MODÜL: SINAVLARIM ---
         async function renderExams() {
-            document.getElementById('page-title').innerText = 'Sınavlarım';
+            document.getElementById('page-title').innerText = 'Sınav Merkezi';
             const { data } = await supabaseClient.from('external_exams').select('*').eq('student_id', userProfile.id).order('scheduled_at', {ascending: true});
             const active = (data||[]).filter(e => !e.is_completed);
             const past = (data||[]).filter(e => e.is_completed);
 
             document.getElementById('view-content').innerHTML = `
-                <div class="space-y-16">
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="space-y-20 animate__animated animate__fadeIn">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
                         ${active.map(e => `
-                            <div class="glass-card p-10 rounded-[3.5rem] h-80 flex flex-col justify-between relative group">
-                                <div class="w-14 h-14 rounded-2xl liquid-inner flex items-center justify-center text-orange-500 text-2xl shadow-inner border border-orange-500/20"><i class="fa-solid fa-file-contract"></i></div>
-                                <div><h4 class="text-2xl font-black text-white italic uppercase mb-2 line-clamp-1">${e.title}</h4><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">${new Date(e.scheduled_at).toLocaleString('tr-TR')}</p></div>
-                                <button onclick="showCode('${e.student_code}', '${e.link}')" class="w-full py-5 bg-orange-600 text-white rounded-3xl font-black text-xs uppercase shadow-2xl tracking-widest hover:brightness-110 transition-all border border-white/10">Sınava Giriş Yap</button>
+                            <div class="glass-card p-12 rounded-[4rem] h-[420px] flex flex-col justify-between group relative overflow-hidden">
+                                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-orange-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
+                                <div>
+                                    <div class="w-16 h-16 rounded-2xl liquid-inner flex items-center justify-center text-orange-500 text-3xl shadow-inner border border-orange-500/20 group-hover:rotate-12 transition-all"><i class="fa-solid fa-file-contract"></i></div>
+                                    <h4 class="text-3xl font-black text-white italic uppercase mb-4 mt-10 line-clamp-2 tracking-tighter">${e.title}</h4>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-[0.3em] italic"><i class="fa-regular fa-clock mr-2 text-orange-500"></i>${new Date(e.scheduled_at).toLocaleString('tr-TR')}</p>
+                                </div>
+                                <button onclick="showExamCode('${e.student_code}', '${e.link}')" class="w-full py-6 bg-orange-600 text-white rounded-[2.5rem] font-black text-xs uppercase shadow-2xl tracking-[0.4em] hover:brightness-110 active:scale-95 transition-all border border-white/10">Sınava Giriş Yap</button>
                             </div>
-                        `).join('') || '<p class="opacity-30 italic font-black uppercase text-xs py-10 col-span-full">Aktif sınav bulunmuyor.</p>'}
+                        `).join('') || '<p class="opacity-30 italic font-black uppercase text-center col-span-full py-32 border-2 border-dashed border-white/5 rounded-[4rem]">Atanmış sınav bulunmuyor.</p>'}
                     </div>
-                    <div class="pt-16 border-t border-white/5 opacity-50">
-                        <h4 class="text-[10px] font-black uppercase text-slate-500 mb-8 italic tracking-[0.5em]">Geçmiş Sınavlar</h4>
+                    <div class="pt-20 border-t border-white/5 opacity-40">
+                        <h4 class="text-[11px] font-black uppercase text-slate-500 mb-12 italic tracking-[0.6em]">Geçmiş Sınav Kayıtları</h4>
                         <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
-                            ${past.map(e => `<div class="glass-card p-8 rounded-[2.5rem] grayscale h-48 flex flex-col justify-between"><div><h4 class="font-black text-white uppercase italic text-sm mb-1">${e.title}</h4><p class="text-[9px] font-bold text-slate-500">${new Date(e.scheduled_at).toLocaleDateString('tr-TR')}</p></div><span class="text-[8px] font-black text-green-500 uppercase tracking-widest border border-green-500/20 px-3 py-1 rounded-full w-fit">BITIRILDI</span></div>`).join('') || '<p class="opacity-30 font-black uppercase text-[10px]">Kayıt yok.</p>'}
+                            ${past.map(e => `
+                                <div class="glass-card p-10 rounded-[3rem] grayscale h-56 flex flex-col justify-between">
+                                    <div><h4 class="font-black text-white uppercase italic text-sm mb-2">${e.title}</h4><p class="text-[10px] font-bold text-slate-500">${new Date(e.scheduled_at).toLocaleDateString('tr-TR')}</p></div>
+                                    <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest border border-blue-500/20 px-5 py-2 rounded-full w-fit bg-blue-500/5 italic">MÜHÜRLENDİ</span>
+                                </div>`).join('')}
                         </div>
                     </div>
                 </div>`;
         }
 
-        // --- ÖDEVLER (MOTORLU & KİLİTLİ) ---
+        // --- MODÜL: ÖDEVLERİM (ZIRHLI MOTOR) ---
         async function renderHomeworks() {
             document.getElementById('page-title').innerText = 'Ödev Takibi';
             const { data: hws } = await supabaseClient.from('homeworks').select('*').eq('student_id', userProfile.id).order('deadline', {ascending: true});
@@ -428,23 +494,23 @@
                 const sent = subSet.has(h.id);
                 const isLocked = isPast || h.is_completed;
                 return `
-                    <div class="glass-card p-10 rounded-[3.5rem] h-[520px] flex flex-col justify-between group relative overflow-hidden ${isLocked && !sent ? 'opacity-50 grayscale' : ''}">
-                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
+                    <div class="glass-card p-12 rounded-[4rem] h-[550px] flex flex-col justify-between group relative overflow-hidden transition-all duration-500 ${isLocked && !sent ? 'opacity-50 grayscale' : ''}">
+                        <div class="absolute -top-10 -right-10 w-48 h-48 bg-blue-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
                         <div>
-                            <div class="flex justify-between items-start mb-10">
-                                <div class="w-14 h-14 rounded-2xl liquid-inner flex items-center justify-center text-blue-500 text-2xl border border-blue-500/20 shadow-inner group-hover:rotate-12 transition-all"><i class="fa-solid fa-file-pen"></i></div>
-                                ${sent ? '<span class="px-4 py-2 bg-green-500 text-white rounded-full text-[8px] font-black uppercase shadow-lg border border-white/20 tracking-widest">Mühürlendi</span>' : (isLocked ? '<span class="px-4 py-2 bg-slate-700 text-white rounded-full text-[8px] font-black uppercase shadow-lg border border-white/10">Kilitlendi</span>' : '<span class="px-4 py-2 bg-orange-600 text-white rounded-full text-[8px] font-black uppercase shadow-lg border border-white/20 animate-pulse">Teslimat Bekliyor</span>')}
+                            <div class="flex justify-between items-start mb-12">
+                                <div class="w-16 h-16 rounded-2xl liquid-inner flex items-center justify-center text-blue-500 text-3xl border border-blue-500/20 shadow-inner group-hover:rotate-12 transition-all"><i class="fa-solid fa-file-pen"></i></div>
+                                ${sent ? '<span class="px-5 py-2.5 bg-green-500 text-white rounded-full text-[9px] font-black uppercase shadow-2xl border border-white/20 tracking-[0.2em]">İLETİLDİ</span>' : (isLocked ? '<span class="px-5 py-2.5 bg-slate-700 text-white rounded-full text-[9px] font-black uppercase shadow-lg border border-white/10">KİLİTLENDİ</span>' : '<span class="px-5 py-2.5 bg-orange-600 text-white rounded-full text-[9px] font-black uppercase shadow-2xl border border-white/20 animate-pulse tracking-[0.2em]">BEKLENİYOR</span>')}
                             </div>
-                            <h4 class="text-3xl font-black text-white uppercase italic tracking-tighter mb-4 leading-tight">${h.title}</h4>
-                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] italic mb-6"><i class="fa-regular fa-calendar-xmark mr-1 text-orange-500"></i> Bitiş: ${new Date(h.deadline).toLocaleString('tr-TR')}</p>
+                            <h4 class="text-3xl font-black text-white uppercase italic tracking-tighter mb-6 leading-tight">${h.title}</h4>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] italic mb-8"><i class="fa-regular fa-clock mr-2 text-orange-500"></i> TESLİM: ${new Date(h.deadline).toLocaleString('tr-TR')}</p>
                         </div>
-                        <div class="space-y-4">
-                            <button onclick="window.openPdfViewer('${h.pdf_url}', '${h.title.replace(/'/g,"\\'")}')" class="w-full py-4 border border-blue-500/30 text-blue-400 rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-xl">Ödev Belgesini Aç</button>
+                        <div class="space-y-5 relative z-10">
+                            <button onclick="window.openPdfViewer('${h.pdf_url}', '${h.title.replace(/'/g,"\\'")}')" class="w-full py-5 border-2 border-blue-500/30 text-blue-400 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-xl">ÖDEV BELGESİNİ AÇ</button>
                             ${sent ? 
-                                `<div class="p-5 liquid-inner text-center text-green-500 font-black text-[9px] uppercase tracking-[0.4em] border border-green-500/20 shadow-inner animate__animated animate__fadeIn"><i class="fa-solid fa-check-double mr-2"></i>Çözüm Dosyası İletildi</div>` : 
+                                `<div class="p-6 liquid-inner text-center text-green-500 font-black text-[10px] uppercase tracking-[0.5em] border border-green-500/20 shadow-inner animate__animated animate__fadeIn"><i class="fa-solid fa-check-double mr-3"></i>GÖNDERİM MÜHÜRLENDİ</div>` : 
                                 (isLocked ? 
-                                    `<div class="p-5 liquid-inner text-center text-slate-500 font-black text-[9px] uppercase tracking-[0.4em] border border-white/5 opacity-50"><i class="fa-solid fa-lock mr-2"></i>Erişim Süresi Doldu</div>` : 
-                                    `<button onclick="window.openUploadModal('${h.id}')" class="w-full py-6 bg-blue-600 text-white rounded-[2.5rem] font-black uppercase text-[11px] tracking-[0.4em] shadow-2xl hover:brightness-110 active:scale-95 transition-all border border-white/10">Sisteme Çözüm Yükle</button>`
+                                    `<div class="p-6 liquid-inner text-center text-slate-500 font-black text-[10px] uppercase tracking-[0.5em] border border-white/5 opacity-50"><i class="fa-solid fa-lock mr-3"></i>ERİŞİM KAPALI</div>` : 
+                                    `<button onclick="window.openUploadModal('${h.id}')" class="w-full py-6 bg-blue-600 text-white rounded-[2.5rem] font-black uppercase text-[11px] tracking-[0.4em] shadow-2xl hover:brightness-110 active:scale-95 transition-all border border-white/10">ÇÖZÜMÜ SİSTEME YÜKLE</button>`
                                 )
                             }
                         </div>
@@ -452,67 +518,62 @@
             };
 
             document.getElementById('view-content').innerHTML = `
-                <div class="space-y-20">
+                <div class="space-y-24">
                     <div>
-                        <h3 class="text-[10px] font-black uppercase text-blue-500 mb-10 italic tracking-[0.6em]"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Güncel Bekleyen Görevler</h3>
+                        <h3 class="text-[11px] font-black uppercase text-blue-500 mb-12 italic tracking-[0.6em] flex items-center gap-6"><i class="fa-solid fa-list-ul mr-2 text-lg"></i> Güncel Görevler Listesi</h3>
                         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-                            ${active.map(h => hwCard(h, false)).join('') || '<p class="opacity-30 italic font-black uppercase text-xs text-center col-span-full py-20 border-2 border-dashed border-white/5 rounded-[4rem]">Bekleyen ödev kaydı bulunmuyor.</p>'}
+                            ${active.map(h => hwCard(h, false)).join('') || '<p class="opacity-30 italic font-black uppercase text-center col-span-full py-32 border-2 border-dashed border-white/5 rounded-[4rem]">Ödev kaydı bulunmuyor.</p>'}
                         </div>
                     </div>
-                    <div class="pt-20 border-t border-white/5">
-                        <h3 class="text-[10px] font-black uppercase text-slate-500 mb-10 italic tracking-[0.6em] opacity-40"><i class="fa-solid fa-folder-closed mr-2"></i> Geçmiş Ödev Kayıtları</h3>
-                        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
-                            ${past.map(h => hwCard(h, true)).join('') || '<p class="opacity-30 font-black uppercase text-[10px] py-10">Arşiv tertemiz.</p>'}
+                    <div class="pt-24 border-t border-white/5">
+                        <h3 class="text-[11px] font-black uppercase text-slate-500 mb-12 italic tracking-[0.6em] opacity-40"><i class="fa-solid fa-folder-closed mr-3"></i> Arşivlenmiş Görev Kayıtları</h3>
+                        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-10">
+                            ${past.map(h => hwCard(h, true)).join('') || '<p class="opacity-30 font-black uppercase text-[10px] py-10">Arşiv boş.</p>'}
                         </div>
                     </div>
                 </div>`;
         }
 
-        // --- REELS MOTORU 2.0 (PROFESYONEL) ---
+        // --- MODÜL: REELS MOTORU 2.0 ---
         async function renderVideos() {
-            document.getElementById('page-title').innerText = 'Kısa Videolar';
+            document.getElementById('page-title').innerText = 'Digital Reels';
             const { data: vids } = await supabaseClient.from('videos').select('*').order('created_at', {ascending: false});
-            if(!vids || vids.length === 0) { document.getElementById('view-content').innerHTML = '<div class="h-full flex items-center justify-center py-40 glass-card rounded-[4rem] text-center italic font-black text-slate-600 uppercase">Sistemde henüz video bulunmuyor.</div>'; return; }
+            if(!vids || vids.length === 0) { document.getElementById('view-content').innerHTML = '<div class="h-full flex items-center justify-center p-20 glass-card rounded-[4rem] text-center italic font-black text-slate-600 uppercase">Sistemde video bulunamadı.</div>'; return; }
 
-            let catalogHtml = vids.map((v, i) => `
-                <div onclick="scrollToReel('${v.id}', ${i})" id="cat-item-${i}" class="catalog-item p-4 glass-card rounded-2xl flex gap-4 items-center">
-                    <div class="w-16 h-20 bg-slate-950 rounded-lg overflow-hidden shrink-0 border border-white/5 shadow-inner">
-                        <video src="${v.video_url}#t=1" class="w-full h-full object-cover opacity-60" muted></video>
+            const catalogHtml = vids.map((v, i) => `
+                <div onclick="window.scrollToReel('${v.id}', ${i})" id="cat-item-${i}" class="catalog-card p-6 rounded-3xl flex gap-6 items-center shadow-xl animate__animated animate__fadeInRight" style="animation-delay: ${i*0.1}s">
+                    <div class="w-20 h-24 bg-slate-950 rounded-2xl overflow-hidden shrink-0 border border-white/10 shadow-inner">
+                        <video src="${v.video_url}#t=1" class="w-full h-full object-cover opacity-50" muted></video>
                     </div>
                     <div class="overflow-hidden">
-                        <h5 class="text-[10px] font-black text-white uppercase truncate drop-shadow-md">${v.title}</h5>
-                        <p class="text-[8px] font-bold text-slate-500 mt-2">ALİ ŞENGÜL</p>
+                        <h5 class="text-xs font-black text-white uppercase italic truncate drop-shadow-md">${v.title}</h5>
+                        <p class="text-[9px] font-bold text-slate-500 mt-2 tracking-widest">ALİ ŞENGÜL</p>
                     </div>
                 </div>`).join('');
 
-            let reelsHtml = vids.map((v, i) => `
+            const reelsHtml = vids.map((v, i) => `
                 <div class="reel-item" id="reel-main-${v.id}">
-                    <video src="${v.video_url}" loop playsinline class="reel-video cursor-pointer" onclick="togglePlay(this)"></video>
-                    <div class="reel-overlay">
-                        <div class="mb-4 flex items-center gap-3 animate__animated animate__fadeInLeft"><div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-white shadow-xl">A</div><span class="text-xs font-black text-white tracking-widest drop-shadow-lg">Ali Şengül</span></div>
-                        <h4 class="text-sm font-bold text-white leading-relaxed drop-shadow-2xl pr-16 animate__animated animate__fadeInLeft animate__delay-1s">${v.title}</h4>
-                    </div>
-                    <div class="reel-actions">
-                        <button onclick="window.likeVideo('${v.id}')" class="flex flex-col items-center gap-1 hover:scale-110 transition-all group">
-                            <div class="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white text-xl shadow-2xl group-hover:bg-red-500/20 group-hover:text-red-500"><i class="fa-solid fa-heart"></i></div>
-                            <span class="text-[8px] font-black uppercase text-white drop-shadow-xl">BEĞEN</span>
-                        </button>
-                        <button onclick="window.openVideoComments('${v.id}')" class="flex flex-col items-center gap-1 hover:scale-110 transition-all group">
-                            <div class="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white text-xl shadow-2xl group-hover:bg-blue-500/20 group-hover:text-blue-500"><i class="fa-solid fa-comment-dots"></i></div>
-                            <span class="text-[8px] font-black uppercase text-white drop-shadow-xl">YORUM</span>
-                        </button>
-                        <button onclick="toggleMute(this)" class="flex flex-col items-center gap-1 hover:scale-110 transition-all group">
-                            <div class="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white text-xl shadow-2xl"><i class="fa-solid fa-volume-high"></i></div>
-                            <span class="text-[8px] font-black uppercase text-white drop-shadow-xl">SES</span>
-                        </button>
+                    <video src="${v.video_url}" loop playsinline class="reel-video cursor-pointer" onclick="window.togglePlay(this)"></video>
+                    <div class="reel-ui-overlay">
+                        <div class="reel-info">
+                            <div class="mb-6 flex items-center gap-4 animate__animated animate__fadeInLeft"><div class="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-white shadow-2xl border border-white/10">A</div><span class="text-sm font-black text-white tracking-[0.2em] drop-shadow-2xl">Ali Şengül</span></div>
+                            <h4 class="text-lg font-bold text-white leading-relaxed drop-shadow-2xl animate__animated animate__fadeInLeft animate__delay-1s">${v.title}</h4>
+                        </div>
+                        <div class="reel-actions">
+                            <button onclick="window.likeVideo('${v.id}')" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 rounded-full glass-card flex items-center justify-center text-white text-2xl hover:text-red-500 transition-all border border-white/10 shadow-2xl"><i class="fa-solid fa-heart"></i></div><span class="text-[9px] font-black uppercase text-white shadow-2xl tracking-widest">Beğen</span></button>
+                            <button onclick="window.openVideoComments('${v.id}')" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 rounded-full glass-card flex items-center justify-center text-white text-2xl hover:text-blue-500 transition-all border border-white/10 shadow-2xl"><i class="fa-solid fa-comment-dots"></i></div><span class="text-[9px] font-black uppercase text-white shadow-2xl tracking-widest">Yorum</span></button>
+                            <button onclick="window.toggleVideoMute(this)" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 rounded-full glass-card flex items-center justify-center text-white text-2xl border border-white/10 shadow-2xl"><i class="fa-solid fa-volume-high"></i></div><span class="text-[9px] font-black uppercase text-white shadow-2xl tracking-widest">Ses</span></button>
+                        </div>
                     </div>
                 </div>`).join('');
 
             document.getElementById('view-content').innerHTML = `
-                <div class="reels-wrapper animate__animated animate__fadeIn">
-                    <div class="reels-container custom-scrollbar" id="reels-engine">${reelsHtml}</div>
-                    <div class="reel-catalog custom-scrollbar hidden lg:flex">
-                        <div class="p-6 glass-card rounded-3xl mb-4 border border-blue-500/20 shadow-2xl"><h4 class="text-[10px] font-black uppercase text-blue-500 tracking-[0.3em] italic">Video Kütüphanesi</h4></div>
+                <div class="reels-layout animate__animated animate__fadeIn">
+                    <div class="reels-player-zone">
+                        <div class="reels-scroll-container" id="reels-engine">${reelsHtml}</div>
+                    </div>
+                    <div class="reel-catalog-sidebar custom-scrollbar">
+                        <div class="p-8 glass-card rounded-[2.5rem] mb-6 border border-blue-500/20 shadow-2xl"><h4 class="text-[11px] font-black uppercase text-blue-500 tracking-[0.5em] italic text-center">Video Kataloğu</h4></div>
                         ${catalogHtml}
                     </div>
                 </div>`;
@@ -526,6 +587,7 @@
                     if(e.isIntersecting) { 
                         e.target.play(); e.target.muted = isMuted; 
                         if(catalogItem) catalogItem.classList.add('active');
+                        catalogItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     } else { 
                         e.target.pause(); 
                         if(catalogItem) catalogItem.classList.remove('active');
@@ -536,68 +598,37 @@
         }
 
         window.togglePlay = (vid) => { if(vid.paused) vid.play(); else vid.pause(); };
-        window.toggleMute = (btn) => { isMuted = !isMuted; const icon = btn.querySelector('i'); icon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high'; document.querySelectorAll('video').forEach(v => v.muted = isMuted); };
+        window.toggleVideoMute = (btn) => { isMuted = !isMuted; const i = btn.querySelector('i'); i.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high'; document.querySelectorAll('video').forEach(v => v.muted = isMuted); };
         window.scrollToReel = (id, i) => { const el = document.getElementById('reel-main-'+id); if(el) el.scrollIntoView({ behavior: 'smooth' }); };
 
-        // --- DOSYALAR (FILTRELEMELI) ---
-        async function renderFiles() {
-            document.getElementById('page-title').innerText = 'Kütüphane';
-            const { data } = await supabaseClient.from('course_files').select('*').or(`student_id.is.null,student_id.eq.${userProfile.id}`).order('created_at', {ascending: false});
-            
-            document.getElementById('view-content').innerHTML = `
-                <div class="max-w-5xl mx-auto space-y-8 view-fade">
-                    <div class="glass-card p-6 rounded-[2.5rem] flex flex-col md:flex-row gap-6 items-center border border-white/10 shadow-2xl">
-                        <div class="relative flex-1 w-full">
-                            <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                            <input type="text" id="file-search" placeholder="Dosya adı ile rasyonel arama yapın..." class="w-full pl-14 pr-6 py-4 rounded-2xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition-all font-bold text-sm shadow-inner" oninput="filterFileList()">
-                        </div>
-                        <div class="flex gap-3 w-full md:w-auto">
-                             <div class="px-5 py-4 liquid-inner rounded-2xl text-[10px] font-black uppercase text-slate-400 tracking-widest border border-white/5 flex items-center gap-2"><i class="fa-solid fa-folder-open text-blue-500"></i> Toplam: ${(data||[]).length}</div>
-                        </div>
-                    </div>
-                    <div class="grid gap-4" id="file-list-container">
-                        ${(data||[]).map(f => `
-                            <div class="file-item-box p-8 glass-card rounded-[3rem] flex flex-col md:flex-row justify-between items-center group transition-all duration-500 hover:bg-white/5 border-l-4 ${f.student_id ? 'border-l-blue-600' : 'border-l-white/10'}">
-                                <div class="flex items-center gap-8 text-left w-full md:w-auto">
-                                    <div class="w-16 h-16 liquid-inner text-red-500 rounded-[1.5rem] flex items-center justify-center text-3xl shadow-inner border border-white/10 group-hover:scale-110 transition-transform duration-700"><i class="fa-solid fa-file-pdf"></i></div>
-                                    <div>
-                                        <h5 class="font-black text-white text-lg uppercase tracking-tighter leading-tight mb-1 drop-shadow-md file-title-text">${f.title}</h5>
-                                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest italic">${new Date(f.created_at).toLocaleDateString('tr-TR')} • Bilimsel Döküman ${f.student_id ? '• <span class="text-blue-400">Sana Özel</span>' : ''}</p>
-                                    </div>
-                                </div>
-                                <button onclick="window.openPdfViewer('${f.file_url}', '${f.title.replace(/'/g,"\\'")}')" class="mt-6 md:mt-0 w-full md:w-auto px-12 py-5 bg-blue-600 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl transition-all hover:brightness-110 active:scale-95 border border-white/10">Belgeyi Aç</button>
-                            </div>
-                        `).join('') || '<p class="text-center opacity-30 italic font-black uppercase tracking-widest py-40">Arşiv boş.</p>'}
-                    </div>
-                </div>`;
-        }
-        window.filterFileList = () => { const q = document.getElementById('file-search').value.toLowerCase(); document.querySelectorAll('.file-item-box').forEach(el => { const t = el.querySelector('.file-title-text').innerText.toLowerCase(); el.style.display = t.includes(q) ? 'flex' : 'none'; }); };
-
-        // --- ANALİZLER (GRID DETAYLI) ---
+        // --- MODÜL: ANALİZ MOTORU ---
         async function renderAnalytics() {
             document.getElementById('page-title').innerText = 'Modern Analiz';
             const { data } = await supabaseClient.from('detailed_analyses').select('*').eq('student_id', userProfile.id).order('created_at', {ascending: false});
             
             document.getElementById('view-content').innerHTML = `
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 view-fade">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12 view-fade">
                     ${(data||[]).map(a => `
-                        <div class="glass-card p-10 rounded-[3.5rem] h-[550px] flex flex-col justify-between group relative overflow-hidden animate__animated animate__fadeInUp">
-                            <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
+                        <div class="glass-card p-12 rounded-[4rem] h-[550px] flex flex-col justify-between group relative overflow-hidden">
+                            <div class="absolute -top-10 -right-10 w-48 h-48 bg-blue-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
                             <div>
                                 <div class="flex justify-between items-center mb-10">
-                                    <span class="px-5 py-2 liquid-inner border border-white/10 rounded-xl text-[10px] font-black uppercase text-blue-400 tracking-widest">${a.type === 'exam' ? 'Sınav' : 'Ödev'}</span>
-                                    <div class="text-right"><h2 class="text-5xl font-black text-white drop-shadow-2xl">%${Math.round((a.correct_count/a.total_questions)*100)}</h2><p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-1">Net Başarı</p></div>
+                                    <span class="px-5 py-2 liquid-inner border border-white/10 rounded-xl text-[9px] font-black uppercase text-blue-400 tracking-[0.2em]">${a.type === 'exam' ? 'Sınav' : 'Ödev'}</span>
+                                    <div class="text-right">
+                                        <h2 class="text-5xl font-black text-white drop-shadow-2xl leading-none">%${Math.round((a.correct_count/a.total_questions)*100)}</h2>
+                                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-2">Net Başarı</p>
+                                    </div>
                                 </div>
-                                <h4 class="text-2xl font-black text-white uppercase italic tracking-tighter mb-8 leading-tight line-clamp-2 pr-4 drop-shadow-md">${a.title}</h4>
-                                <div class="grid grid-cols-3 gap-4 mb-8">
-                                    <div class="text-center p-5 liquid-inner border border-green-500/20 shadow-inner group-hover:bg-green-500/5 transition-all duration-500"><p class="text-2xl font-black text-green-500 drop-shadow-sm">${a.correct_count}</p><p class="text-[8px] font-black text-slate-500 uppercase mt-1 tracking-widest">Doğru</p></div>
-                                    <div class="text-center p-5 liquid-inner border border-red-500/20 shadow-inner group-hover:bg-red-500/5 transition-all duration-500"><p class="text-2xl font-black text-red-500 drop-shadow-sm">${a.wrong_count}</p><p class="text-[8px] font-black text-slate-500 uppercase mt-1 tracking-widest">Yanlış</p></div>
-                                    <div class="text-center p-5 liquid-inner border border-slate-700 shadow-inner group-hover:bg-slate-700/10 transition-all duration-500"><p class="text-2xl font-black text-slate-400 drop-shadow-sm">${a.empty_count}</p><p class="text-[8px] font-black text-slate-500 uppercase mt-1 tracking-widest">Boş</p></div>
+                                <h4 class="text-2xl font-black text-white uppercase italic tracking-tighter mb-10 leading-tight line-clamp-2 pr-6">${a.title}</h4>
+                                <div class="grid grid-cols-3 gap-5">
+                                    <div class="text-center p-5 liquid-inner border border-green-500/20 shadow-inner group-hover:bg-green-500/5 transition-all"><p class="text-2xl font-black text-green-500">${a.correct_count}</p><p class="text-[9px] font-black text-slate-500 uppercase mt-2">Doğru</p></div>
+                                    <div class="text-center p-5 liquid-inner border border-red-500/20 shadow-inner group-hover:bg-red-500/5 transition-all"><p class="text-2xl font-black text-red-500">${a.wrong_count}</p><p class="text-[9px] font-black text-slate-500 uppercase mt-2">Yanlış</p></div>
+                                    <div class="text-center p-5 liquid-inner border border-slate-700 shadow-inner"><p class="text-2xl font-black text-slate-400">${a.empty_count}</p><p class="text-[9px] font-black text-slate-500 uppercase mt-2">Boş</p></div>
                                 </div>
                             </div>
-                            <button onclick="window.showAnalyticsDetail('${a.id}')" class="w-full py-6 bg-white/5 border border-white/10 text-white rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.4em] hover:bg-blue-600 transition-all shadow-2xl hover:scale-[1.02] active:scale-95">Raporu Derinleştir</button>
+                            <button onclick="window.showAnalyticsDetail('${a.id}')" class="w-full py-6 bg-white/5 border border-white/10 text-white rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.4em] hover:bg-blue-600 transition-all shadow-2xl">Raporu Derinleştir</button>
                         </div>
-                    `).join('') || '<div class="col-span-full py-40 glass-card rounded-[4rem] text-center italic font-black uppercase tracking-widest opacity-30">Henüz bir analiz kaydı bulunmuyor.</div>'}
+                    `).join('') || '<div class="col-span-full py-40 glass-card rounded-[4rem] text-center italic font-black uppercase tracking-widest opacity-30">Veri bulunmuyor.</div>'}
                 </div>`;
         }
 
@@ -612,28 +643,72 @@
             let qDetails = a.question_details; if(typeof qDetails === 'string') qDetails = JSON.parse(qDetails);
             
             let html = `
-                <div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-8 animate__animated animate__fadeIn">
                     ${(qDetails||[]).map(q => {
                         const isCorrect = q.student === q.correct;
                         const isEmpty = q.student === '-';
                         const statusClass = isCorrect ? 'optic-correct' : (isEmpty ? 'optic-empty' : 'optic-wrong');
+                        const statusIcon = isCorrect ? 'fa-check' : (isEmpty ? 'fa-minus' : 'fa-xmark');
                         return `
-                            <div class="flex flex-col items-center gap-3 animate__animated animate__zoomIn">
-                                <span class="text-[9px] font-black text-slate-500 uppercase tracking-tighter">Soru ${q.no}</span>
-                                <div class="optic-circle ${statusClass} shadow-lg">${q.student}</div>
-                                <p class="text-[8px] font-bold text-white text-center h-8 overflow-hidden uppercase leading-tight">${q.topic}</p>
-                                <span class="text-[8px] font-black text-green-500 bg-green-500/10 px-2 py-0.5 rounded-md border border-green-500/20">D: ${q.correct}</span>
+                            <div class="flex flex-col items-center gap-4 glass-card p-6 rounded-3xl group">
+                                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Soru ${q.no}</span>
+                                <div class="optic-cell ${statusClass} shadow-xl scale-125 my-2"><i class="fa-solid ${statusIcon}"></i></div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-white uppercase italic leading-tight mb-2 h-8 line-clamp-2">${q.topic}</p>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[9px] font-bold text-slate-500">SEN: <span class="text-white">${q.student}</span></span>
+                                        <span class="text-[9px] font-bold text-green-500">DOĞRU: ${q.correct}</span>
+                                    </div>
+                                </div>
                             </div>`;
                     }).join('')}
                 </div>`;
             cont.innerHTML = html;
         };
 
-        // --- YARDIMCILAR (ZIRHLI GONDERIM) ---
+        // --- DOSYALARIM (FILTRELEMELI) ---
+        async function renderFiles() {
+            document.getElementById('page-title').innerText = 'Belge Arşivi';
+            const { data } = await supabaseClient.from('course_files').select('*').or(`student_id.is.null,student_id.eq.${userProfile.id}`).order('created_at', {ascending: false});
+            
+            document.getElementById('view-content').innerHTML = `
+                <div class="max-w-5xl mx-auto space-y-10 view-fade">
+                    <div class="glass-card p-8 rounded-[3rem] flex flex-col lg:flex-row gap-8 items-center border border-white/10 shadow-2xl">
+                        <div class="relative flex-1 w-full">
+                            <i class="fa-solid fa-dna absolute left-6 top-1/2 -translate-y-1/2 text-blue-500 text-lg"></i>
+                            <input type="text" id="file-search" placeholder="Arşivde bilimsel arama yapın..." class="w-full pl-16 pr-8 py-5 rounded-3xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition-all font-bold text-sm shadow-inner" oninput="window.filterFiles()">
+                        </div>
+                        <div class="flex gap-4">
+                             <div class="px-8 py-5 liquid-inner rounded-3xl text-[11px] font-black uppercase text-slate-400 tracking-[0.2em] border border-white/5 flex items-center gap-3"><i class="fa-solid fa-database text-blue-500"></i> <span id="file-count">${(data||[]).length}</span> BELGE</div>
+                        </div>
+                    </div>
+                    <div class="grid gap-6" id="file-list-zone">
+                        ${(data||[]).map(f => `
+                            <div class="file-card p-10 glass-card rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center group transition-all duration-700 hover:bg-blue-600/5 border-l-8 ${f.student_id ? 'border-l-blue-600' : 'border-l-white/10'}">
+                                <div class="flex items-center gap-10 text-left w-full md:w-auto">
+                                    <div class="w-20 h-20 liquid-inner text-red-500 rounded-[2rem] flex items-center justify-center text-4xl shadow-2xl border border-white/10 group-hover:scale-110 transition-transform duration-700 animate__animated animate__fadeInLeft"><i class="fa-solid fa-file-pdf"></i></div>
+                                    <div>
+                                        <h5 class="font-black text-white text-xl uppercase tracking-tighter leading-tight mb-2 drop-shadow-2xl f-title">${f.title}</h5>
+                                        <div class="flex gap-4 items-center">
+                                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest italic">${new Date(f.created_at).toLocaleDateString('tr-TR')}</p>
+                                            ${f.student_id ? '<span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-md text-[8px] font-black uppercase border border-blue-500/20 shadow-sm">KİŞİYE ÖZEL</span>' : '<span class="px-3 py-1 bg-white/5 text-slate-500 rounded-md text-[8px] font-black uppercase border border-white/10 shadow-sm">GENEL KAYNAK</span>'}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="window.openPdfViewer('${f.file_url}', '${f.title.replace(/'/g,"\\'")}')" class="mt-8 md:mt-0 w-full md:w-auto px-16 py-6 bg-blue-600 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl transition-all hover:brightness-110 active:scale-95 border border-white/10 group-hover:translate-x-3 duration-500">BELGEYİ GÖRÜNTÜLE</button>
+                            </div>
+                        `).join('') || '<p class="text-center opacity-30 italic font-black uppercase tracking-widest py-40">Henüz dosya paylaşılmamış.</p>'}
+                    </div>
+                </div>`;
+        }
+
+        window.filterFiles = () => { const q = document.getElementById('file-search').value.toLowerCase(); document.querySelectorAll('.file-card').forEach(el => { const t = el.querySelector('.f-title').innerText.toLowerCase(); el.style.display = t.includes(q) ? 'flex' : 'none'; }); };
+
+        // --- YARDIMCI MOTORLAR (MODAL & YÜKLEME) ---
         window.openUploadModal = (id) => { document.getElementById('upload-hw-id').value = id; selectedFiles = []; updateFileListUI(); document.getElementById('homework-upload-modal').classList.remove('hidden'); document.getElementById('homework-upload-modal').classList.add('flex'); };
         window.closeUploadModal = () => { document.getElementById('homework-upload-modal').classList.add('hidden'); };
         window.handleHwFiles = (input) => { Array.from(input.files).forEach(f => selectedFiles.push(f)); updateFileListUI(); input.value = ''; };
-        window.updateFileListUI = () => { document.getElementById('upload-file-list').innerHTML = selectedFiles.map((f, i) => `<div class="p-4 liquid-inner rounded-2xl text-[10px] font-black uppercase flex justify-between items-center border border-white/10 group transition-all hover:bg-red-500/10"><span><i class="fa-solid fa-image text-blue-500 mr-3"></i>${f.name}</span><button type="button" onclick="selectedFiles.splice(${i},1);updateFileListUI();" class="text-red-500 hover:scale-125 transition-transform"><i class="fa-solid fa-trash-can"></i></button></div>`).join(''); };
+        window.updateFileListUI = () => { document.getElementById('upload-file-list').innerHTML = selectedFiles.map((f, i) => `<div class="p-5 liquid-inner rounded-3xl text-[11px] font-black uppercase flex justify-between items-center border border-white/10 group transition-all hover:bg-red-500/5"><span><i class="fa-solid fa-image text-blue-500 mr-4 text-lg"></i>${f.name}</span><button type="button" onclick="selectedFiles.splice(${i},1);updateFileListUI();" class="w-10 h-10 rounded-full flex items-center justify-center text-red-500 hover:bg-red-500/20 transition-all"><i class="fa-solid fa-trash-can text-lg"></i></button></div>`).join(''); };
         
         window.submitHomework = async (e) => {
             e.preventDefault(); const btn = document.getElementById('upload-submit-btn'); if(selectedFiles.length === 0) return alert("Lütfen en az bir çözüm fotoğrafı seçin!");
@@ -646,14 +721,16 @@
                     if(!error) { const { data: pUrl } = supabaseClient.storage.from('matota-files').getPublicUrl(data.path); urls.push(pUrl.publicUrl); }
                 }
                 const { error } = await supabaseClient.from('homework_submissions').insert([{ homework_id: document.getElementById('upload-hw-id').value, student_id: userProfile.id, file_urls: urls, note: document.getElementById('upload-note').value }]);
-                if(!error) { alert("Çözümler başarıyla mühürlendi!"); closeUploadModal(); navigate('s-homeworks'); } else throw error;
+                if(!error) { alert("Çözümler başarıyla sisteme mühürlendi!"); closeUploadModal(); navigate('s-homeworks'); } else throw error;
             } catch(err) { alert("Hata: " + err.message); btn.disabled = false; btn.innerText = "GÖNDERİMİ TAMAMLA"; }
         };
 
-        window.showCode = (c, l) => { document.getElementById('exam-code-display').innerText = c; document.getElementById('copy-exam-link-btn').onclick = () => { navigator.clipboard.writeText(c); window.open(l, '_blank'); }; document.getElementById('exam-code-modal').classList.remove('hidden'); document.getElementById('exam-code-modal').classList.add('flex'); };
+        window.showExamCode = (c, l) => { document.getElementById('exam-code-display').innerText = c; document.getElementById('copy-exam-link-btn').onclick = () => { navigator.clipboard.writeText(c); window.open(l, '_blank'); }; document.getElementById('exam-code-modal').classList.remove('hidden'); document.getElementById('exam-code-modal').classList.add('flex'); };
         window.closeExamCodeModal = () => { document.getElementById('exam-code-modal').classList.add('hidden'); };
         window.closeAnalysisModal = () => { document.getElementById('analysis-detail-modal').classList.add('hidden'); };
+        window.openPdfViewer = (u, t) => { document.getElementById('pdf-iframe').src = u; document.getElementById('pdf-title').innerText = t; document.getElementById('pdf-viewer-modal').classList.remove('hidden'); document.getElementById('pdf-viewer-modal').classList.add('flex'); };
         window.closePdfViewer = () => { document.getElementById('pdf-iframe').src = ''; document.getElementById('pdf-viewer-modal').classList.add('hidden'); };
+        window.closeVideoComments = () => { document.getElementById('video-comments-modal').classList.add('hidden'); };
 
         window.onload = initAuth;
     </script>
