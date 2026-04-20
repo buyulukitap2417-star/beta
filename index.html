@@ -2,597 +2,561 @@
 <html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATOTA | Modern Öğrenci Yönetim Platformu v8.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MATOTA Pro | Eğitim ve Finans Komuta Merkezi v31.0</title>
     
-    <!-- Merkezi Kütüphane Hub'ı -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { 
-                extend: { 
-                    colors: { 
-                        darkBg: '#020617', 
-                        darkCard: '#0f172a', 
-                        brand: { blue: '#2563eb', orange: '#ea580c', purple: '#8b5cf6', green: '#10b981', red: '#ef4444' } 
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'floating 3s ease-in-out infinite',
-                        'glow': 'glowing 2s infinite alternate',
-                    },
-                    keyframes: {
-                        floating: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
-                        glowing: { '0%': { boxShadow: '0 0 5px rgba(37, 99, 235, 0.2)' }, '100%': { boxShadow: '0 0 20px rgba(37, 99, 235, 0.6)' } }
-                    }
-                } 
-            }
+            theme: { extend: { colors: { darkBg: '#020617', darkCard: '#0f172a', brand: { blue: '#2563eb', orange: '#ea580c', emerald: '#10b981', red: '#ef4444' } } } }
         }
     </script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        /* --- CORE ESTETİK --- */
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: linear-gradient(135deg, #020617, #0f172a, #172554);
-            background-size: 400% 400%;
-            animation: gradientBG 20s ease infinite;
-            color: #f8fafc;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #020617, #0f172a, #172554); background-size: 400% 400%; animation: gradientBG 20s ease infinite; color: #f8fafc; height: 100vh; width: 100vw; overflow: hidden; user-select: none; }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .ambient-orb { position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.12; animation: moveOrb 25s infinite alternate ease-in-out; pointer-events: none; }
-        .orb-1 { width: 45vw; height: 45vw; background: #1d4ed8; top: -10%; left: -10%; }
-        .orb-2 { width: 35vw; height: 35vw; background: #7c2d12; bottom: -10%; right: -10%; }
-        @keyframes moveOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40px, 40px) scale(1.2); } }
+        .ambient-orb { position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.12; pointer-events: none; }
+        .orb-1 { width: 45vw; height: 45vw; background: #2563eb; top: -10%; left: -10%; }
+        .orb-2 { width: 35vw; height: 35vw; background: #ea580c; bottom: -10%; right: -10%; }
 
-        /* --- MODERN CAM TASARIMI --- */
-        .glass-card {
-            background: rgba(15, 23, 42, 0.5) !important;
-            backdrop-filter: blur(20px) saturate(180%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-card:hover { transform: translateY(-4px); border-color: rgba(37, 99, 235, 0.4) !important; box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7); }
-        .liquid-inner { background: rgba(0, 0, 0, 0.3) !important; backdrop-filter: blur(10px) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 1rem; }
+        .glass-card { background: rgba(15, 23, 42, 0.6) !important; backdrop-filter: blur(25px) saturate(180%) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5); transition: all 0.3s ease; }
+        .glass-card:hover { border-color: rgba(37, 99, 235, 0.3) !important; }
+        .liquid-inner { background: rgba(0, 0, 0, 0.3) !important; backdrop-filter: blur(10px) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 0.75rem; }
 
-        /* --- SABİT LOGO & MENÜ VURGUSU --- */
-        .logo-fixed { position: fixed; top: 24px; left: 32px; z-index: 2000; filter: drop-shadow(0 0 15px rgba(37, 99, 235, 0.4)); pointer-events: auto; }
-        
-        .sidebar-link { transition: all 0.3s ease; border-left: 0px solid transparent; }
-        .sidebar-link.active { 
-            background: linear-gradient(90deg, rgba(37, 99, 235, 0.15) 0%, transparent 100%) !important;
-            color: #3b82f6 !important;
-            border-left: 4px solid #2563eb !important;
-            padding-left: 1.75rem !important;
-            box-shadow: inset 10px 0 20px -10px rgba(37, 99, 235, 0.2);
-        }
-        .sidebar-link.active i { color: #3b82f6 !important; }
+        .sidebar-fixed { position: fixed; top: 0; left: 0; height: 100vh; width: 240px; z-index: 5000; display: flex; flex-direction: column; background: rgba(15, 23, 42, 0.98) !important; backdrop-filter: blur(40px); border-right: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; overflow: hidden; }
+        .sidebar-link { transition: all 0.3s ease; display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.25rem; width: 220px; border-radius: 0.75rem; margin: 0.25rem 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; cursor: pointer;}
+        .sidebar-link:hover { opacity: 1; background: rgba(255,255,255,0.05); color: #fff; }
+        .sidebar-link.active { background: linear-gradient(90deg, rgba(37, 99, 235, 0.2) 0%, transparent 100%) !important; color: #3b82f6 !important; border-left: 3px solid #2563eb !important; opacity: 1; box-shadow: inset 10px 0 20px -10px rgba(37, 99, 235, 0.3); }
 
-        /* --- REELS LABORATUVARI --- */
-        .reels-grid { height: calc(100vh - 180px); display: flex; gap: 20px; max-width: 1000px; margin: 0 auto; }
-        .reels-player { flex: 1.4; height: 100%; border-radius: 2.5rem; background: #000; position: relative; overflow: hidden; border: 4px solid rgba(255,255,255,0.05); }
-        .reels-scroller { height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-        .reels-scroller::-webkit-scrollbar { display: none; }
-        .reel-unit { height: 100%; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
-        .reel-video-tag { width: 100%; height: 100%; object-fit: contain; }
-        .reel-overlay-ui { position: absolute; inset: 0; pointer-events: none; z-index: 20; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 45%); padding: 30px; display: flex; flex-direction: column; justify-content: flex-end; }
-        .reel-actions-bar { position: absolute; right: 20px; bottom: 100px; display: flex; flex-direction: column; gap: 20px; z-index: 40; pointer-events: auto; }
-        .catalog-sidebar { flex: 0.8; height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .catalog-card { cursor: pointer; transition: all 0.4s ease; border: 1px solid rgba(255,255,255,0.05); }
-        .catalog-card.active { border-color: #2563eb; background: rgba(37, 99, 235, 0.1); transform: scale(1.02); }
+        #app-main-area { margin-left: 240px; width: calc(100% - 240px); height: 100vh; display: flex; flex-direction: column; position: relative; }
+        .scrollable-content { flex: 1; overflow-y: auto; padding-bottom: 80px; }
 
-        /* --- ANALİZ GRID SİSTEMİ --- */
-        .optic-cell { width: 36px; height: 36px; border-radius: 10px; display: flex; items-center; justify-content: center; font-size: 10px; font-weight: 900; border: 1px solid rgba(255,255,255,0.1); }
-        .res-correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: #10b981; }
-        .res-wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: #ef4444; }
-        .res-empty { background: rgba(255, 255, 255, 0.05); color: #94a3b8; }
-
-        /* --- ERGONOMİK AYARLAR --- */
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.3); border-radius: 10px; }
-        .view-frame { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; height: 100%; }
+        
+        .view-fade { animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Öğrenci Paneli Ekstra Stilleri */
+        .student-widget { border-radius: 2rem; padding: 2rem; position: relative; overflow: hidden; }
+        .student-widget::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent); transform: translateX(-100%); transition: transform 0.6s ease; }
+        .student-widget:hover::before { transform: translateX(100%); }
+
         @media (max-width: 1024px) {
-            .catalog-sidebar { display: none; }
-            .reels-player { max-width: 100%; }
-            .sidebar-fixed { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; flex-direction: row !important; z-index: 2001; background: #020617; border-top: 1px solid rgba(255,255,255,0.1); padding: 5px !important; }
+            .sidebar-fixed { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; flex-direction: row !important; z-index: 5001; background: #020617; border-top: 1px solid rgba(255,255,255,0.1); padding: 5px !important; border-right: none; }
+            #app-main-area { margin-left: 0; width: 100%; padding-bottom: 65px !important; }
+            .sidebar-link { padding: 0.5rem; justify-content: center; width: auto; flex: 1; margin: 0; border-radius: 0.5rem; }
             .sidebar-link span { display: none; }
-            .logo-fixed { top: 16px; left: 16px; }
-            main { padding-bottom: 90px !important; }
         }
     </style>
 </head>
-<body class="dark overflow-hidden">
+<body class="dark">
     <div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div>
 
-    <!-- YÜKLEME EKRANI -->
-    <div id="loading" class="fixed inset-0 z-[5000] bg-darkBg flex flex-col items-center justify-center transition-opacity duration-700">
+    <div id="loading" class="fixed inset-0 z-[6000] bg-darkBg flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="h-16 w-16 border-2 border-slate-800 border-t-blue-600 rounded-full animate-spin"></div>
-        <p class="mt-6 text-[10px] font-black uppercase tracking-[0.4em] text-blue-500 animate-pulse">SİSTEM Terminali Başlatılıyor</p>
+        <p class="mt-6 text-[10px] font-black uppercase tracking-[0.4em] text-blue-500 animate-pulse text-center">TITAN v31.0 SİSTEMİ BAŞLATILIYOR</p>
     </div>
 
-    <!-- SABİT LOGO -->
-    <div class="logo-fixed animate__animated animate__fadeInDown">
-        <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" alt="MATOTA" class="h-10 md:h-12 w-auto object-contain">
-    </div>
-
-    <!-- LOGIN OVERLAY -->
-    <div id="login-overlay" class="fixed inset-0 z-[4000] bg-darkBg flex flex-col items-center justify-center p-6 hidden">
-        <div class="max-w-md w-full glass-card p-10 rounded-[3rem] shadow-2xl text-center border border-white/10 animate__animated animate__zoomIn">
-            <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" class="h-14 mx-auto mb-8">
-            <h3 class="text-xl font-black text-white italic uppercase tracking-tighter mb-8">Öğrenci Terminali</h3>
-            <form id="login-form" class="space-y-4 text-left">
-                <input type="email" id="login-email" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition font-bold text-sm" placeholder="E-posta">
-                <input type="password" id="login-password" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition font-bold text-sm" placeholder="Şifre">
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg hover:brightness-110 transition tracking-widest mt-4 border border-white/10">Sisteme Gir</button>
+    <div id="login-overlay" class="fixed inset-0 z-[5500] bg-darkBg flex flex-col items-center justify-center p-6 hidden">
+        <div class="max-w-md w-full glass-card p-12 rounded-[4rem] text-center border border-white/10 animate__animated animate__zoomIn">
+            <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" class="h-14 mx-auto mb-10 drop-shadow-xl" alt="Logo">
+            <h3 class="text-2xl font-black text-white italic mb-2 uppercase tracking-widest">Sisteme Giriş</h3>
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-8">Öğretmen veya Öğrenci Olarak Bağlanın</p>
+            <form id="login-form">
+                <div class="space-y-5">
+                    <input type="email" id="login-email" required class="w-full p-5 rounded-2xl liquid-inner outline-none text-white border border-white/5 font-bold text-sm shadow-inner" placeholder="E-posta Adresiniz">
+                    <input type="password" id="login-password" required class="w-full p-5 rounded-2xl liquid-inner outline-none text-white border border-white/5 font-bold text-sm shadow-inner" placeholder="Şifreniz">
+                    <button type="submit" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black uppercase shadow-lg hover:bg-blue-500 transition tracking-[0.2em] border border-white/10">SİSTEME BAĞLAN</button>
+                </div>
             </form>
-            <div id="login-error" class="mt-4 text-red-500 text-[10px] font-bold hidden uppercase tracking-widest text-center"></div>
+            <div id="login-error" class="mt-4 text-red-500 text-[10px] font-bold hidden uppercase text-center italic"></div>
         </div>
     </div>
 
-    <!-- ANA PANEL -->
     <div id="app" class="hidden min-h-screen flex flex-col md:flex-row overflow-hidden relative z-10">
-        <!-- Sidebar -->
-        <aside class="w-full md:w-72 glass-card border-r border-white/5 flex flex-col h-screen shrink-0 relative z-[1001] sidebar-fixed">
-            <div class="h-32 hidden md:block"></div>
-            <nav class="flex-1 px-4 py-2 space-y-1 overflow-y-auto custom-scrollbar" id="sidebar-nav"></nav>
-            <div class="p-6 border-t border-white/5 hidden md:block">
-                <div class="flex items-center gap-3 mb-6 px-2">
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black" id="user-avatar">?</div>
-                    <div class="overflow-hidden"><p class="text-xs font-black truncate" id="user-name-display">...</p><p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Öğrenci</p></div>
+        
+        <aside class="sidebar-fixed shadow-2xl">
+            <div class="p-6 text-center flex justify-center items-center h-28 shrink-0">
+                <img src="https://tnhofdyonpbmozqzimzj.supabase.co/storage/v1/object/public/logos/acik.png" alt="MATOTA" class="h-10 w-auto object-contain drop-shadow-xl">
+            </div>
+            <nav class="flex-1 overflow-y-auto custom-scrollbar" id="sidebar-nav"></nav>
+            <div class="p-4 border-t border-white/5 shrink-0">
+                <div class="flex items-center gap-3 mb-4 px-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-sm" id="user-avatar">A</div>
+                    <div class="overflow-hidden"><p class="text-[11px] font-black truncate text-white" id="user-name-display">...</p></div>
                 </div>
-                <button onclick="logout()" class="w-full py-3 text-red-500 hover:bg-red-500/10 rounded-2xl font-black text-[10px] uppercase transition border border-red-500/10 tracking-widest">Çıkış Yap</button>
+                <button onclick="window.logout()" class="w-full py-2.5 text-red-500 hover:bg-red-500/10 rounded-xl font-black text-[9px] uppercase transition border border-red-500/10 tracking-widest shadow-sm">Çıkış Yap</button>
             </div>
         </aside>
 
-        <!-- İçerik -->
-        <main class="flex-1 h-screen overflow-y-auto custom-scrollbar flex flex-col relative" id="main-scroll-area">
-            <header class="p-6 md:px-12 md:pt-12 flex justify-between items-center h-28 shrink-0" id="main-header">
-                <h1 class="text-3xl font-black text-white italic uppercase tracking-tighter" id="page-title">...</h1>
-                <div class="flex items-center gap-4">
-                    <div class="px-4 py-2 liquid-inner border border-white/10 rounded-xl font-black text-[10px] text-blue-400 hidden sm:block shadow-xl">
-                        PUAN: <span id="header-score" class="text-white ml-1">0</span>
+        <main class="flex-1 h-screen flex flex-col relative overflow-hidden" id="app-main-area">
+            <div class="scrollable-content custom-scrollbar">
+                <header class="p-6 md:px-10 md:pt-10 flex justify-between items-center h-24 shrink-0" id="main-header">
+                    <div>
+                        <h1 class="text-xl md:text-3xl font-black text-white italic uppercase tracking-tighter" id="page-title">...</h1>
+                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-1 italic" id="page-subtitle">Ali Şengül Modern Eğitim Modeli</p>
                     </div>
-                    <button onclick="navigate('dashboard')" class="w-10 h-10 flex items-center justify-center glass-card rounded-xl text-slate-400 hover:text-white transition-all"><i data-lucide="home"></i></button>
-                </div>
-            </header>
-            <div id="view-content" class="w-full flex-1 px-6 md:px-12 pb-12 max-w-7xl mx-auto view-fade"></div>
+                    <div class="items-center gap-4 hidden" id="teacher-header-actions">
+                        <div class="px-5 py-2 liquid-inner border border-white/10 rounded-2xl font-black text-[11px] text-blue-400 hidden sm:flex flex-col items-center shadow-2xl">
+                            <span class="opacity-50 text-[8px] uppercase tracking-widest text-center">Sistem Durumu</span>
+                            <span class="text-white text-xs font-mono tracking-widest">AKTİF <i class="fa-solid fa-shield-check text-emerald-500"></i></span>
+                        </div>
+                    </div>
+                </header>
+                
+                <div id="view-content" class="w-full px-6 md:px-10 pb-10 max-w-7xl mx-auto view-fade"></div>
+            </div>
         </main>
     </div>
 
-    <!-- MODALLAR -->
-    <div id="pdf-viewer-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl hidden items-center justify-center p-4 sm:p-10 z-[4000]">
-        <div class="w-full max-w-6xl h-[90vh] glass-card rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden relative">
-            <div class="p-4 border-b border-white/10 flex justify-between items-center liquid-inner">
-                <h3 class="font-black text-white uppercase italic text-xs" id="pdf-title">Modern Belge Önizleme</h3>
-                <button onclick="closePdfViewer()" class="w-10 h-10 liquid-inner rounded-full flex items-center justify-center text-white"><i data-lucide="x"></i></button>
-            </div>
-            <iframe id="pdf-iframe" src="" class="flex-1 w-full bg-slate-900 border-0"></iframe>
-        </div>
-    </div>
-
-    <div id="hw-upload-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl hidden items-center justify-center p-6 z-[4000]">
-        <div class="max-w-xl w-full glass-card p-10 rounded-[3.5rem] shadow-2xl border border-white/10 animate__animated animate__fadeInUp">
-            <button onclick="closeUploadModal()" class="absolute top-8 right-8 text-slate-500 hover:text-white transition"><i data-lucide="x"></i></button>
-            <h3 class="text-2xl font-black mb-1 italic uppercase text-white">Çözüm İlet</h3>
-            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-8">Emeğini teknolojik bir veriye dönüştür</p>
-            <form id="hw-upload-form" class="space-y-6">
-                <input type="hidden" id="upload-hw-id">
-                <div id="upload-file-list" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar pr-2"></div>
-                <button type="button" onclick="document.getElementById('hw-file-input').click()" class="w-full p-10 border-2 border-dashed border-blue-500/30 rounded-[2.5rem] text-blue-500 font-black uppercase text-[10px] hover:bg-blue-500/5 transition-all">
-                    <i data-lucide="camera" class="w-10 h-10 mb-2 mx-auto block"></i>FOTOĞRAFLARI SEÇ
-                </button>
-                <input type="file" id="hw-file-input" class="hidden" multiple accept="image/*" onchange="window.handleHwFiles(this)">
-                <textarea id="upload-note" placeholder="Mesajınız..." class="w-full p-5 rounded-2xl liquid-inner outline-none text-white h-32 border border-white/5"></textarea>
-                <button type="submit" id="upload-submit-btn" class="w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black uppercase shadow-lg">GÖNDERİMİ TAMAMLA</button>
+    <div id="new-student-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-2xl hidden items-center justify-center p-4 z-[9999]" onclick="if(event.target === this) window.closeModal('new-student-modal')">
+        <div class="max-w-md w-full glass-card p-10 rounded-[3rem] shadow-2xl relative border border-white/15 animate__animated animate__zoomIn">
+            <button onclick="window.closeModal('new-student-modal')" class="absolute top-8 right-8 text-slate-500 hover:text-white transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h3 class="text-2xl font-black uppercase text-blue-500 mb-6 text-center italic tracking-tighter">Öğrenci Mühürleme</h3>
+            <form id="new-student-form" onsubmit="window.saveNewStudent(event)" class="space-y-5 text-left">
+                <div><label class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Öğrenci Adı Soyadı</label><input type="text" id="ns-name" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/10 font-bold" placeholder="Örn: Aybüke Şengül"></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">E-Posta (Giriş İçin)</label><input type="email" id="ns-email" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/10 font-bold" placeholder="ogrenci@matota.com"></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Geçici Şifre</label><input type="password" id="ns-password" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/10 font-bold" placeholder="En az 6 karakter"></div>
+                <button type="submit" id="ns-btn" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black uppercase shadow-lg hover:brightness-110 tracking-widest text-[11px] transition">SİSTEME KAYDET</button>
             </form>
         </div>
     </div>
 
-    <div id="analysis-detail-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-3xl hidden items-center justify-center p-4 z-[4000]">
-        <div class="w-full max-w-7xl h-[90vh] glass-card rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden border border-white/10">
-            <div class="p-8 border-b border-white/10 flex justify-between items-center liquid-inner">
-                <h3 class="text-xl font-black text-white uppercase italic" id="analysis-title">Detaylı Rapor</h3>
-                <button onclick="closeAnalysisModal()" class="w-12 h-12 liquid-inner rounded-full flex items-center justify-center text-white"><i data-lucide="x"></i></button>
+    <div id="math-games-modal" class="fixed inset-0 bg-slate-950/98 backdrop-blur-3xl hidden items-center justify-center p-4 sm:p-12 z-[9999]" onclick="if(event.target === this) window.closeModal('math-games-modal')">
+        <div class="w-full max-w-6xl h-[90vh] glass-card rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden relative border border-white/15 animate__animated animate__zoomIn">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center liquid-inner shrink-0 shadow-2xl">
+                <div>
+                    <h3 class="text-3xl font-black text-white uppercase italic tracking-tighter">Oyun Laboratuvarı</h3>
+                    <p class="text-[9px] font-black text-orange-500 uppercase tracking-[0.4em] mt-1 italic">Ali ŞENGÜL Matematik Oyunları</p>
+                </div>
+                <button onclick="window.closeModal('math-games-modal')" class="w-12 h-12 liquid-inner rounded-full flex items-center justify-center text-white hover:bg-red-500/10 transition shadow-2xl border border-white/10"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            <div id="analysis-content" class="flex-1 overflow-y-auto p-8 custom-scrollbar bg-black/20"></div>
+            <div class="flex-1 w-full bg-darkBg/50 p-10 overflow-y-auto custom-scrollbar">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-3xl text-center border-t-4 border-t-orange-500 hover:-translate-y-2 transition cursor-pointer">
+                        <i class="fa-solid fa-gamepad text-5xl text-orange-500 mb-6"></i>
+                        <h4 class="text-xl font-black text-white uppercase tracking-tighter mb-2">İşlem Pratiği</h4>
+                        <p class="text-xs text-slate-400 font-medium">Hızlı düşün, doğru karar ver.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl text-center border-t-4 border-t-blue-500 hover:-translate-y-2 transition cursor-pointer">
+                        <i class="fa-solid fa-shapes text-5xl text-blue-500 mb-6"></i>
+                        <h4 class="text-xl font-black text-white uppercase tracking-tighter mb-2">Geometri Avı</h4>
+                        <p class="text-xs text-slate-400 font-medium">Şekilleri tanı, bulmacaları çöz.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl text-center border-t-4 border-t-emerald-500 hover:-translate-y-2 transition cursor-pointer">
+                        <i class="fa-solid fa-brain text-5xl text-emerald-500 mb-6"></i>
+                        <h4 class="text-xl font-black text-white uppercase tracking-tighter mb-2">LGS Simülatörü</h4>
+                        <p class="text-xs text-slate-400 font-medium">Yeni nesil sorularla zihnini zorla.</p>
+                    </div>
+                </div>
+                <div class="mt-10 text-center opacity-50">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">"Matematik bir oyun değil, oyun matematiğin ta kendisidir." - Ali Hoca</p>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div id="add-homework-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-2xl hidden items-center justify-center p-4 z-[9999]" onclick="if(event.target === this) window.closeModal('add-homework-modal')">
+        <div class="max-w-md w-full glass-card p-10 rounded-[3rem] shadow-2xl relative border border-white/15 animate__animated animate__zoomIn">
+            <button onclick="window.closeModal('add-homework-modal')" class="absolute top-8 right-8 text-slate-500 hover:text-white transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h3 class="text-2xl font-black uppercase text-blue-500 mb-6 text-center italic tracking-tighter">Yeni Görev Ataması</h3>
+            <form id="homework-form" onsubmit="window.saveHomework(event)" class="space-y-5 text-left">
+                <div><label class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Öğrenci</label><select id="hw-student" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/10 font-bold text-sm"></select></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Ödev Başlığı</label><input type="text" id="hw-title" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/10 font-bold" placeholder="Örn: Üslü Sayılar Testi"></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Teslim Tarihi</label><input type="date" id="hw-date" required class="w-full p-4 rounded-xl liquid-inner outline-none text-white border border-white/10 font-bold"></div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black uppercase shadow-lg hover:brightness-110 tracking-widest text-[11px]">ÖDEVİ GÖNDER</button>
+            </form>
+        </div>
+    </div>
+
+
     <script>
+        // ==========================================
+        // TITAN LMS v31.0 - CORE JS
+        // ==========================================
         const SUPABASE_URL = "https://tnhofdyonpbmozqzimzj.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_xVFfpA85IjnCqIjEJWvtvQ_VZCH_n60"; 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        let userProfile = null, studentFiles = [], reelsObserver = null, isMuted = false;
 
-        // AUTH & BOOTSTRAP
+        let userProfile = null;
+        // Öğretmen Datası
+        let students = [], assignments = [], reports = [];
+        // Öğrenci Datası
+        let myAssignments = [];
+
+        // --- GLOBAL FUNCTIONS ---
+        window.closeModal = function(id) { 
+            const el = document.getElementById(id);
+            if(el) { el.style.display = 'none'; el.classList.add('hidden'); el.classList.remove('flex'); }
+        };
+
+        window.logout = function() { localStorage.clear(); supabaseClient.auth.signOut().then(() => window.location.reload()); };
+
+        // --- AUTH ENGINE ---
         async function initAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                const { data } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
-                if (data && data.role === 'student') {
-                    userProfile = data;
-                    document.getElementById('user-name-display').innerText = data.full_name;
-                    document.getElementById('user-avatar').innerText = data.full_name[0].toUpperCase();
-                    document.getElementById('app').classList.remove('hidden'); document.getElementById('app').classList.add('flex');
-                    document.getElementById('login-overlay').classList.add('hidden');
-                    renderSidebar(); navigate(localStorage.getItem('lastView') || 'dashboard');
-                } else { logout(); }
-            } else { document.getElementById('login-overlay').classList.remove('hidden'); document.getElementById('login-overlay').classList.add('flex'); }
-            document.getElementById('loading').classList.add('opacity-0'); setTimeout(()=>document.getElementById('loading').remove(), 500);
-        }
-
-        async function handleLogin(e) {
-            e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true; btn.innerText = "Doğrulanıyor...";
-            const { error } = await supabaseClient.auth.signInWithPassword({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value });
-            if (error) { document.getElementById('login-error').innerText = "Hata: " + error.message; document.getElementById('login-error').classList.remove('hidden'); btn.disabled = false; btn.innerText = "Sisteme Gir"; } 
-            else { location.reload(); }
-        }
-
-        function logout() { localStorage.clear(); supabaseClient.auth.signOut().then(() => location.reload()); }
-
-        // NAVİGASYON
-        function renderSidebar() {
-            const items = [{id:'dashboard',n:'Dashboard',i:'home'},{id:'s-lessons',n:'Derslerim',i:'video'},{id:'s-exams',n:'Sınavlarım',i:'file-text'},{id:'s-homeworks',n:'Ödevlerim',i:'book-open'},{id:'s-files',n:'Dosyalarım',i:'folder'},{id:'s-videos',n:'Reels',i:'play-circle'},{id:'s-analytics',n:'Analizlerim',i:'pie-chart'}];
-            document.getElementById('sidebar-nav').innerHTML = items.map(x => `<button onclick="navigate('${x.id}')" id="nav-${x.id}" class="sidebar-link w-full flex items-center space-x-5 px-8 py-5 rounded-[2rem] font-bold text-[10px] uppercase tracking-widest transition hover:bg-white/5"><i data-lucide="${x.i}" class="w-6 h-6"></i><span>${x.n}</span></button>`).join('');
-            lucide.createIcons();
-        }
-
-        async function navigate(v) {
-            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-            const btn = document.getElementById('nav-'+v); if(btn) btn.classList.add('active');
-            localStorage.setItem('lastView', v);
-            const cont = document.getElementById('view-content');
-            const header = document.getElementById('main-header');
-            const scrollArea = document.getElementById('main-scroll-area');
-            
-            cont.innerHTML = '<div class="p-20 flex justify-center"><i class="fa-solid fa-atom fa-spin text-4xl text-blue-600"></i></div>';
-            
-            if(v === 's-videos') { header.classList.add('hidden'); scrollArea.classList.add('overflow-hidden'); scrollArea.classList.remove('overflow-y-auto'); cont.classList.remove('px-6', 'md:px-12', 'max-w-7xl'); cont.classList.add('p-0', 'max-w-full'); }
-            else { header.classList.remove('hidden'); scrollArea.classList.add('overflow-y-auto'); scrollArea.classList.remove('overflow-hidden'); cont.classList.add('px-6', 'md:px-12', 'max-w-7xl'); cont.classList.remove('p-0', 'max-w-full'); if(reelsObserver) reelsObserver.disconnect(); }
-
-            if(v === 'dashboard') await renderDashboard();
-            else if(v === 's-lessons') await renderLessons();
-            else if(v === 's-exams') await renderExams();
-            else if(v === 's-homeworks') await renderHomeworks();
-            else if(v === 's-files') await renderFiles();
-            else if(v === 's-videos') await renderVideos();
-            else if(v === 's-analytics') await renderAnalytics();
-        }
-
-        // MODÜL RENDERERS
-        async function renderDashboard() {
-            document.getElementById('page-title').innerText = 'Dashboard';
-            const [ {data: p}, {data: next}, {data: hws}, {data: fls} ] = await Promise.all([
-                supabaseClient.from('points').select('amount').eq('student_id', userProfile.id),
-                supabaseClient.from('lessons').select('*').eq('student_id', userProfile.id).neq('is_completed', true).order('scheduled_at').limit(1).maybeSingle(),
-                supabaseClient.from('homeworks').select('id').eq('student_id', userProfile.id).neq('is_completed', true).gte('deadline', new Date().toISOString()),
-                supabaseClient.from('course_files').select('*').or(`student_id.is.null,student_id.eq.${userProfile.id}`).order('created_at', {ascending: false}).limit(1).maybeSingle()
-            ]);
-            const total = (p || []).reduce((a, b) => a + b.amount, 0);
-            document.getElementById('header-score').innerText = total;
-
-            document.getElementById('view-content').innerHTML = `
-                <div class="grid lg:grid-cols-2 gap-8 animate__animated animate__fadeInUp">
-                    <div class="bg-blue-600 p-12 rounded-[4rem] text-white shadow-2xl flex flex-col items-center justify-center relative overflow-hidden group">
-                        <span class="text-[9px] uppercase font-black opacity-70 mb-2 tracking-[0.4em]">Başarı Skoru</span>
-                        <h2 class="text-9xl font-black leading-none drop-shadow-2xl animate__animated animate__pulse animate__infinite">${total}</h2>
-                        <i class="fa-solid fa-crown absolute -right-4 -bottom-4 text-9xl opacity-10 group-hover:rotate-12 transition-all"></i>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                        <div class="glass-card p-8 rounded-[3rem] border-l-4 border-l-orange-500">
-                            <h4 class="text-[9px] font-black uppercase text-slate-500 mb-4 italic tracking-widest">Sıradaki Oturum</h4>
-                            ${next ? `<div><h3 class="text-xl font-black uppercase text-white mb-1 drop-shadow-md">${next.title}</h3><p class="text-[10px] font-bold text-orange-500 uppercase">${new Date(next.scheduled_at).toLocaleString('tr-TR')}</p></div>` : '<p class="opacity-40 italic font-bold text-xs uppercase">Ders yok.</p>'}
-                        </div>
-                        <div class="glass-card p-8 rounded-[3rem] border-l-4 border-l-blue-500 flex flex-col justify-center text-center">
-                            <h4 class="text-[9px] font-black uppercase text-slate-500 mb-4 italic tracking-widest">Aktif Ödev</h4>
-                            <p class="text-white font-black text-5xl italic drop-shadow-lg">${hws?.length || 0}</p>
-                        </div>
-                        <div class="glass-card p-8 rounded-[3rem] border-l-4 border-l-purple-500 md:col-span-2 flex items-center justify-between">
-                            <div><h4 class="text-[9px] font-black uppercase text-slate-500 mb-4 italic tracking-widest">Son Eklenen Dosya</h4>
-                            ${fls ? `<div class="flex items-center gap-3"><div class="w-10 h-10 liquid-inner flex items-center justify-center text-red-500 text-xl rounded-xl border border-white/5 shadow-inner"><i class="fa-solid fa-file-pdf"></i></div><p class="font-bold text-white uppercase text-xs">${fls.title}</p></div>` : '<p class="opacity-40 italic font-black text-xs uppercase">Dosya yok.</p>'}</div>
-                            <button onclick="navigate('s-files')" class="px-6 py-3 bg-white/5 rounded-2xl font-black text-[9px] uppercase tracking-widest hover:bg-white/10 transition-all border border-white/10 shadow-lg">Kütüphaneye Git</button>
-                        </div>
-                    </div>
-                </div>`;
-        }
-
-        async function renderLessons() {
-            document.getElementById('page-title').innerText = 'Ders Programı';
-            const { data } = await supabaseClient.from('lessons').select('*').eq('student_id', userProfile.id).order('scheduled_at', {ascending: true});
-            const now = new Date();
-            const active = (data||[]).filter(l => !l.is_completed && new Date(l.scheduled_at) > new Date(now.getTime() - 120 * 60000));
-            const past = (data||[]).filter(l => l.is_completed || new Date(l.scheduled_at) <= new Date(now.getTime() - 120 * 60000));
-
-            const card = (l, isPast) => `
-                <div class="glass-card p-10 rounded-[4rem] h-[450px] flex flex-col justify-between group relative overflow-hidden transition-all duration-700 ${isPast ? 'opacity-50 grayscale hover:grayscale-0 hover:opacity-100' : ''}">
-                    <div class="absolute -top-10 -right-10 w-48 h-48 bg-blue-600/5 rounded-full group-hover:scale-125 transition-all"></div>
-                    <div>
-                        <div class="w-16 h-16 rounded-2xl liquid-inner flex items-center justify-center text-blue-500 text-3xl border border-blue-500/20 shadow-inner group-hover:rotate-12 transition-all"><i class="fa-solid fa-video"></i></div>
-                        <h4 class="text-3xl font-black text-white italic uppercase mb-4 mt-10 leading-tight tracking-tighter drop-shadow-md">${l.title}</h4>
-                        <p class="text-xs font-bold text-slate-500 uppercase tracking-[0.3em] italic flex items-center gap-2"><i class="fa-regular fa-calendar-check mr-2 text-blue-500"></i>${new Date(l.scheduled_at).toLocaleString('tr-TR')}</p>
-                    </div>
-                    ${!isPast ? `<a href="${l.link}" target="_blank" class="w-full py-6 bg-blue-600 text-white rounded-[2.5rem] font-black text-center shadow-2xl tracking-[0.4em] hover:brightness-110 active:scale-95 transition-all text-xs border border-white/10 uppercase">OTURUMA KATIL</a>` : `<div class="p-6 liquid-inner text-center text-green-500 font-black text-[11px] uppercase tracking-[0.5em] border border-green-500/10 shadow-inner italic">DERS TAMAMLANDI</div>`}
-                </div>`;
-
-            document.getElementById('view-content').innerHTML = `
-                <div class="space-y-16">
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase text-blue-500 mb-8 italic tracking-[0.4em] flex items-center gap-4"><span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span> Aktif Oturumlar</h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">${active.map(l => card(l, false)).join('') || '<div class="col-span-full py-16 text-center opacity-30 font-black italic tracking-widest border-2 border-dashed border-white/5 rounded-3xl uppercase text-xs">Planlı oturum yok.</div>'}</div>
-                    </div>
-                    <div class="pt-10 border-t border-white/5 opacity-50">
-                        <h3 class="text-[10px] font-black uppercase text-slate-500 mb-8 italic tracking-[0.4em]"><i class="fa-solid fa-archive mr-2"></i> Geçmiş Oturumlar</h3>
-                        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">${past.map(l => `<div class="glass-card p-6 rounded-3xl h-40 flex flex-col justify-between grayscale"><div><h4 class="font-black text-white uppercase italic text-[11px] mb-1 line-clamp-2">${l.title}</h4><p class="text-[9px] font-bold text-slate-500">${new Date(l.scheduled_at).toLocaleDateString('tr-TR')}</p></div><span class="text-[8px] font-black text-green-500 uppercase tracking-widest border border-green-500/20 px-3 py-1.5 rounded-full w-fit bg-green-500/5 shadow-sm">BITIRILDI</span></div>`).join('') || '<p class="opacity-30 font-black uppercase text-[9px] py-6">Kayıt yok.</p>'}</div>
-                    </div>
-                </div>`;
-        }
-
-        async function renderHomeworks() {
-            document.getElementById('page-title').innerText = 'Ödev Takibi';
-            const [ {data: hws}, {data: subs} ] = await Promise.all([
-                supabaseClient.from('homeworks').select('*').eq('student_id', userProfile.id).order('deadline', {ascending: true}),
-                supabaseClient.from('homework_submissions').select('homework_id').eq('student_id', userProfile.id)
-            ]);
-            const subSet = new Set((subs||[]).map(s => s.homework_id));
-            const now = new Date();
-            const active = (hws||[]).filter(h => !h.is_completed && new Date(h.deadline) > now);
-            const past = (hws||[]).filter(h => h.is_completed || new Date(h.deadline) <= now);
-
-            const card = (h, isPast) => {
-                const sent = subSet.has(h.id);
-                const locked = isPast || h.is_completed;
-                return `
-                    <div class="glass-card p-8 rounded-[3.5rem] h-[520px] flex flex-col justify-between group relative overflow-hidden transition-all duration-500 ${locked && !sent ? 'opacity-50 grayscale' : ''}">
-                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
-                        <div>
-                            <div class="flex justify-between items-start mb-10">
-                                <div class="w-14 h-14 rounded-2xl liquid-inner flex items-center justify-center text-blue-500 text-2xl border border-blue-500/20 shadow-inner group-hover:rotate-12 transition-all"><i class="fa-solid fa-file-pen"></i></div>
-                                ${sent ? '<span class="px-4 py-2 bg-green-500 text-white rounded-full text-[8px] font-black uppercase shadow-2xl border border-white/20 tracking-widest">İLETİLDİ</span>' : (locked ? '<span class="px-4 py-2 bg-slate-700 text-white rounded-full text-[8px] font-black uppercase shadow-lg border border-white/10">KİLİTLİ</span>' : '<span class="px-4 py-2 bg-orange-600 text-white rounded-full text-[8px] font-black uppercase shadow-2xl border border-white/20 animate-pulse tracking-widest">BEKLİYOR</span>')}
-                            </div>
-                            <h4 class="text-2xl font-black text-white uppercase italic tracking-tighter mb-4 leading-tight drop-shadow-md line-clamp-3">${h.title}</h4>
-                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] italic mb-6"><i class="fa-regular fa-clock mr-1 text-orange-500"></i> Bitiş: ${new Date(h.deadline).toLocaleString('tr-TR')}</p>
-                        </div>
-                        <div class="space-y-4 relative z-10">
-                            <button onclick="window.openPdfViewer('${h.pdf_url}', '${h.title.replace(/'/g,"\\'")}')" class="w-full py-4 border-2 border-blue-500/30 text-blue-400 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-xl">ÖDEV BELGESİNİ AÇ</button>
-                            ${sent ? 
-                                `<div class="p-5 liquid-inner text-center text-green-500 font-black text-[9px] uppercase tracking-[0.4em] border border-green-500/20 shadow-inner animate__animated animate__fadeIn"><i class="fa-solid fa-check-double mr-2"></i>ÇÖZÜM MÜHÜRLENDİ</div>` : 
-                                (locked ? 
-                                    `<div class="p-5 liquid-inner text-center text-slate-500 font-black text-[9px] uppercase tracking-[0.4em] border border-white/5 opacity-50"><i class="fa-solid fa-lock mr-2"></i>ERİŞİM KAPALI</div>` : 
-                                    `<button onclick="window.openUploadModal('${h.id}', '${h.title.replace(/'/g,"\\'")}')" class="w-full py-6 bg-blue-600 text-white rounded-[2.5rem] font-black uppercase text-[11px] tracking-[0.4em] shadow-2xl hover:brightness-110 active:scale-95 transition-all border border-white/10">ÇÖZÜMÜ YÜKLE</button>`
-                                )
-                            }
-                        </div>
-                    </div>`;
-            };
-
-            document.getElementById('view-content').innerHTML = `
-                <div class="space-y-16">
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase text-blue-500 mb-8 italic tracking-[0.5em] flex items-center gap-4"><i class="fa-solid fa-clock-rotate-left"></i> Bekleyen Modern Görevler</h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                            ${active.map(h => card(h, false)).join('') || '<p class="opacity-30 italic font-black uppercase text-center col-span-full py-20 border-2 border-dashed border-white/5 rounded-[4rem]">Ödev bulunmuyor.</p>'}
-                        </div>
-                    </div>
-                    <div class="pt-16 border-t border-white/5 opacity-50">
-                        <h3 class="text-[10px] font-black uppercase text-slate-500 mb-8 italic tracking-[0.5em]"><i class="fa-solid fa-archive"></i> Arşivlenmiş Görev Kayıtları</h3>
-                        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
-                            ${past.map(h => card(h, true)).join('') || '<p class="opacity-30 font-black uppercase text-[10px] py-10 text-center col-span-full">Arşiv boş.</p>'}
-                        </div>
-                    </div>
-                </div>`;
-        }
-
-        async function renderVideos() {
-            document.getElementById('page-title').innerText = 'Modern Reels';
-            const { data: vids } = await supabaseClient.from('videos').select('*').order('created_at', {ascending: false});
-            if(!vids || vids.length === 0) { document.getElementById('view-content').innerHTML = '<div class="h-full flex items-center justify-center p-20 glass-card rounded-[4rem] text-center italic font-black text-slate-600 uppercase text-sm">Henüz video paylaşılmamış.</div>'; return; }
-
-            const catalogHtml = vids.map((v, i) => `
-                <div onclick="window.scrollToReel('${v.id}', ${i})" id="cat-item-${i}" class="catalog-card shadow-lg animate__animated animate__fadeInRight p-4 rounded-2xl flex gap-4 items-center group overflow-hidden relative" style="animation-delay: ${i*0.05}s">
-                    <div class="catalog-thumb shadow-inner shrink-0">
-                        <video src="${v.video_url}#t=1" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" muted></video>
-                        <div class="absolute inset-0 flex items-center justify-center"><i class="fa-solid fa-play text-white/40 text-sm group-hover:text-white transition drop-shadow-md"></i></div>
-                    </div>
-                    <div class="overflow-hidden flex-1">
-                        <h5 class="text-[11px] font-black text-white uppercase italic truncate drop-shadow-md group-hover:text-blue-500 transition-colors">${v.title}</h5>
-                        <p class="text-[8px] font-bold text-slate-500 mt-2 tracking-widest uppercase">Ali Şengül Modern</p>
-                    </div>
-                </div>`).join('');
-
-            const reelsHtml = vids.map(v => `
-                <div class="reel-unit" id="reel-main-${v.id}" data-reel-id="${v.id}">
-                    <video src="${v.video_url}" loop playsinline data-vid-id="${v.id}" class="reel-video-tag cursor-pointer h-full w-full object-contain" onclick="window.toggleReelPlay(this)"></video>
-                    <div class="reel-overlay-ui">
-                        <div class="mb-4 flex items-center gap-3 animate__animated animate__fadeInLeft"><div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white shadow-xl border border-white/10">A</div><span class="text-xs font-black text-white tracking-widest drop-shadow-2xl">Ali Şengül</span></div>
-                        <h4 class="text-xs font-bold text-white leading-relaxed drop-shadow-2xl animate__animated animate__fadeInLeft animate__delay-1s line-clamp-3 italic tracking-tight">${v.title}</h4>
-                    </div>
-                    <div class="reel-actions-bar">
-                        <button class="flex flex-col items-center gap-1 hover:scale-110 transition-all group"><div class="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white text-xl border border-white/10 shadow-2xl group-hover:text-red-500 group-hover:bg-red-500/10"><i class="fa-solid fa-heart"></i></div><span class="text-[8px] font-black uppercase text-white drop-shadow-lg">BEĞEN</span></button>
-                        <button onclick="window.openVideoComments('${v.id}')" class="flex flex-col items-center gap-1 hover:scale-110 transition-all group"><div class="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white text-xl border border-white/10 shadow-2xl group-hover:text-blue-400 group-hover:bg-blue-400/10"><i class="fa-solid fa-comment-dots"></i></div><span class="text-[8px] font-black uppercase text-white drop-shadow-lg">GÖRÜŞ</span></button>
-                        <button onclick="window.toggleGlobalMute(this)" class="flex flex-col items-center gap-1 hover:scale-110 transition-all group"><div class="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white text-xl border border-white/10 shadow-2xl"><i class="fa-solid fa-volume-high" id="global-mute-icon"></i></div><span class="text-[8px] font-black uppercase text-white drop-shadow-lg">SES</span></button>
-                    </div>
-                </div>`).join('');
-
-            document.getElementById('view-content').innerHTML = `
-                <div class="reels-grid animate__animated animate__fadeIn h-full">
-                    <div class="reels-player shadow-2xl">
-                        <div class="reels-scroller" id="reels-engine">${reelsHtml}</div>
-                    </div>
-                    <div class="catalog-sidebar custom-scrollbar p-2">
-                        <div class="p-6 glass-card rounded-[2.5rem] mb-4 text-center border-2 border-blue-500/20 shadow-xl relative overflow-hidden group shrink-0">
-                           <h4 class="text-[10px] font-black uppercase text-blue-500 tracking-[0.5em] italic relative z-10">VİDEO KATALOĞU</h4>
-                        </div>
-                        <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2">
-                            ${catalogHtml}
-                        </div>
-                    </div>
-                </div>`;
-
-            const engine = document.getElementById('reels-engine');
-            const videos = engine.querySelectorAll('video');
-            reelsObserver = new IntersectionObserver((entries) => {
-                entries.forEach(e => { 
-                    const vId = e.target.dataset.vidId;
-                    const catCard = document.querySelector(`.catalog-card[onclick*="${vId}"]`);
-                    if(e.isIntersecting) { 
-                        e.target.play(); e.target.muted = isMuted; 
-                        document.querySelectorAll('.catalog-card').forEach(c => c.classList.remove('active'));
-                        if(catCard) {
-                            catCard.classList.add('active');
-                            catCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        }
-                    } else { e.target.pause(); } 
-                });
-            }, { threshold: 0.8 });
-            videos.forEach(v => reelsObserver.observe(v));
-        }
-
-        window.toggleReelPlay = (v) => { if(v.paused) v.play(); else v.pause(); };
-        window.toggleGlobalMute = (btn) => { isMuted = !isMuted; const icon = btn.querySelector('i'); icon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high'; document.querySelectorAll('.reel-video-tag').forEach(v => v.muted = isMuted); };
-        window.scrollToReel = (id) => { document.getElementById('reel-main-'+id)?.scrollIntoView({ behavior: 'smooth' }); };
-
-        async function renderFiles() {
-            document.getElementById('page-title').innerText = 'Kütüphane';
-            const { data } = await supabaseClient.from('course_files').select('*').or(`student_id.is.null,student_id.eq.${userProfile.id}`).order('created_at', {ascending: false});
-            
-            document.getElementById('view-content').innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-6 view-fade">
-                    <div class="glass-card p-6 rounded-[2.5rem] flex flex-col md:flex-row gap-6 items-center border border-white/10 shadow-2xl">
-                        <div class="relative flex-1 w-full">
-                            <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 w-6"></i>
-                            <input type="text" id="file-search" placeholder="Arşivde bilimsel arama..." class="w-full pl-14 pr-6 py-4 rounded-2xl liquid-inner outline-none text-white border border-white/5 focus:border-blue-500 transition-all font-bold text-xs shadow-inner" oninput="window.runFileFilter()">
-                        </div>
-                        <div class="px-6 py-4 liquid-inner rounded-2xl text-[9px] font-black uppercase text-slate-400 tracking-widest border border-white/5 flex items-center gap-3"><i class="fa-solid fa-layer-group text-blue-500"></i> Toplam: ${(data||[]).length}</div>
-                    </div>
-                    <div class="grid gap-4" id="file-list-zone">
-                        ${(data||[]).map(f => `
-                            <div class="file-card p-8 glass-card rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center group transition-all duration-700 hover:bg-blue-600/5 border-l-4 ${f.student_id ? 'border-l-blue-600' : 'border-l-white/10'}">
-                                <div class="flex items-center gap-6 text-left w-full md:w-auto">
-                                    <div class="w-14 h-14 liquid-inner text-red-500 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-white/10 group-hover:scale-110 transition-transform"><i class="fa-solid fa-file-pdf"></i></div>
-                                    <div>
-                                        <h5 class="font-black text-white text-base uppercase tracking-tighter drop-shadow-md f-name-text">${f.title}</h5>
-                                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1 italic">${new Date(f.created_at).toLocaleDateString('tr-TR')} • Bilimsel Döküman</p>
-                                    </div>
-                                </div>
-                                <button onclick="window.openPdfViewer('${f.file_url}', '${f.title.replace(/'/g,"\\'")}')" class="mt-4 md:mt-0 w-full md:w-auto px-10 py-4 bg-blue-600 text-white rounded-[2rem] font-black text-[9px] uppercase tracking-widest shadow-xl transition-all hover:brightness-110 active:scale-95 border border-white/10">Belgeyi Aç</button>
-                            </div>
-                        `).join('') || '<p class="text-center opacity-30 italic font-black uppercase tracking-widest py-20 border-2 border-dashed border-white/5 rounded-[4rem]">Henüz döküman paylaşılmamış.</p>'}
-                    </div>
-                </div>`;
-            lucide.createIcons();
-        }
-        window.runFileFilter = () => { const q = document.getElementById('file-search').value.toLowerCase(); document.querySelectorAll('.file-card').forEach(el => { const t = el.querySelector('.f-name-text').innerText.toLowerCase(); el.style.display = t.includes(q) ? 'flex' : 'none'; }); };
-
-        async function renderAnalytics() {
-            document.getElementById('page-title').innerText = 'Modern Analiz';
-            const { data } = await supabaseClient.from('detailed_analyses').select('*').eq('student_id', userProfile.id).order('created_at', {ascending: false});
-            
-            document.getElementById('view-content').innerHTML = `
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 view-fade">
-                    ${(data||[]).map((a, i) => `
-                        <div class="glass-card p-10 rounded-[3.5rem] h-[520px] flex flex-col justify-between group relative overflow-hidden animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
-                            <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/5 rounded-full group-hover:scale-150 transition-all duration-1000"></div>
-                            <div>
-                                <div class="flex justify-between items-center mb-10">
-                                    <span class="px-4 py-1.5 liquid-inner border border-white/10 rounded-lg text-[9px] font-black uppercase text-blue-400 tracking-widest">${a.type === 'exam' ? 'Sınav' : 'Ödev'}</span>
-                                    <div class="text-right">
-                                        <h2 class="text-5xl font-black text-white drop-shadow-2xl leading-none italic">%{Math.round((a.correct_count/a.total_questions)*100)}</h2>
-                                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-2">Başarı Oranı</p>
-                                    </div>
-                                </div>
-                                <h4 class="text-2xl font-black text-white uppercase italic tracking-tighter mb-10 leading-tight line-clamp-3 pr-6 drop-shadow-md">${a.title}</h4>
-                                <div class="grid grid-cols-3 gap-5">
-                                    <div class="text-center p-5 liquid-inner border border-green-500/20 shadow-inner group-hover:bg-green-500/5 transition-all"><p class="text-2xl font-black text-green-500">${a.correct_count}</p><p class="text-[9px] font-black text-slate-500 uppercase mt-2">Doğru</p></div>
-                                    <div class="text-center p-5 liquid-inner border border-red-500/20 shadow-inner group-hover:bg-red-500/5 transition-all"><p class="text-2xl font-black text-red-500">${a.wrong_count}</p><p class="text-[9px] font-black text-slate-500 uppercase mt-2">Yanlış</p></div>
-                                    <div class="text-center p-5 liquid-inner border border-slate-700 shadow-inner"><p class="text-2xl font-black text-slate-400">${a.empty_count}</p><p class="text-[9px] font-black text-slate-500 uppercase mt-2">Boş</p></div>
-                                </div>
-                            </div>
-                            <button onclick="window.showAnalysisDetail('${a.id}')" class="w-full py-5 bg-white/5 border border-white/10 text-white rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.4em] hover:bg-blue-600 transition-all shadow-2xl relative z-10 active:scale-95 border-blue-500/20">DETAYLI RAPORU İNCELE</button>
-                        </div>
-                    `).join('') || '<p class="opacity-30 italic font-black uppercase tracking-widest py-20 text-center col-span-full border-2 border-dashed border-white/5 rounded-[4rem]">Rapor bulunmuyor.</p>'}
-                </div>`;
-        }
-
-        window.showAnalysisDetail = async (id) => {
-            const { data: a } = await supabaseClient.from('detailed_analyses').select('*').eq('id', id).single();
-            if(!a) return;
-            const modal = document.getElementById('analysis-detail-modal');
-            const cont = document.getElementById('analysis-content');
-            document.getElementById('analysis-title').innerText = a.title;
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            
-            let details = a.question_details; if(typeof details === 'string') details = JSON.parse(details);
-            
-            let html = `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-8 animate__animated animate__fadeIn">`;
-            (details||[]).forEach(q => {
-                const isCorrect = q.student === q.correct;
-                const isEmpty = q.student === '-';
-                const stClass = isCorrect ? 'res-correct' : (isEmpty ? 'res-empty' : 'res-wrong');
-                html += `
-                    <div class="flex flex-col items-center gap-4 glass-card p-6 rounded-[2rem] group transition-all hover:border-blue-500 shadow-2xl">
-                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] italic group-hover:text-blue-500 transition-colors">Soru ${q.no}</span>
-                        <div class="optic-cell ${stClass} shadow-2xl scale-125 my-2 font-black text-lg">${q.student}</div>
-                        <div class="text-center w-full">
-                            <p class="text-[9px] font-black text-white uppercase italic leading-tight mb-3 h-8 line-clamp-2 px-2">${q.topic}</p>
-                            <div class="flex flex-col gap-1 border-t border-white/5 pt-3">
-                                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Doğru: <span class="text-green-500 ml-1">${q.correct}</span></span>
-                            </div>
-                        </div>
-                    </div>`;
-            });
-            cont.innerHTML = html + `</div>`;
-        }
-
-        // --- POPUP MOTORLARI ---
-        window.openPdfViewer = (u, t) => { document.getElementById('pdf-iframe').src = u; document.getElementById('pdf-title').innerText = t; document.getElementById('pdf-viewer-modal').classList.remove('hidden'); document.getElementById('pdf-viewer-modal').classList.add('flex'); };
-        window.closePdfViewer = () => { document.getElementById('pdf-iframe').src = ''; document.getElementById('pdf-viewer-modal').classList.add('hidden'); };
-        
-        window.openUploadModal = (id, title) => { document.getElementById('upload-hw-id').value = id; studentFiles = []; updateFilesUI(); document.getElementById('hw-upload-modal').classList.remove('hidden'); document.getElementById('hw-upload-modal').classList.add('flex'); };
-        window.closeUploadModal = () => { document.getElementById('hw-upload-modal').classList.add('hidden'); };
-        window.handleHwFiles = (input) => { Array.from(input.files).forEach(f => studentFiles.push(f)); updateFilesUI(); input.value = ''; };
-        window.updateFilesUI = () => { 
-            document.getElementById('upload-file-list').innerHTML = studentFiles.map((f, i) => `
-                <div class="p-4 liquid-inner rounded-2xl flex justify-between items-center border border-white/10 group hover:border-blue-500 transition-all shadow-xl">
-                    <span class="text-[11px] font-black uppercase text-white truncate max-w-[250px] flex items-center gap-3"><i class="fa-solid fa-image text-blue-500 w-6 h-6"></i>${f.name}</span>
-                    <button type="button" onclick="studentFiles.splice(${i},1);updateFilesUI();" class="text-red-500 hover:scale-110 transition-transform"><i class="fa-solid fa-trash-can w-6 h-6"></i></button>
-                </div>`).join(''); 
-        };
-        
-        window.showCode = (c, l) => { document.getElementById('display-code').innerText = c; document.getElementById('copy-btn').onclick = () => { navigator.clipboard.writeText(c); window.open(l, '_blank'); }; document.getElementById('code-modal').classList.remove('hidden'); document.getElementById('code-modal').classList.add('flex'); };
-        window.closeAnalysisModal = () => { document.getElementById('analysis-detail-modal').classList.add('hidden'); };
-
-        // --- SUBMISSION MOTORU ---
-        document.getElementById('hw-upload-form').onsubmit = async (e) => {
-            e.preventDefault(); const btn = document.getElementById('upload-submit-btn'); if(studentFiles.length === 0) return alert("Lütfen en az bir çözüm fotoğrafı seçin Ali Hoca!");
-            btn.disabled = true; btn.innerText = "YÜKLENİYOR...";
             try {
-                const urls = [];
-                for(let f of studentFiles) {
-                    const fn = `submissions/${userProfile.id}/${Date.now()}_${f.name.replace(/[^a-z0-9.]/gi, '_').toLowerCase()}`;
-                    const { data, error } = await supabaseClient.storage.from('matota-files').upload(fn, f);
-                    if(!error) { const { data: pUrl } = supabaseClient.storage.from('matota-files').getPublicUrl(data.path); urls.push(pUrl.publicUrl); }
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                const lo = document.getElementById('login-overlay');
+                const appMain = document.getElementById('app');
+                
+                if (session) {
+                    if(lo) { lo.style.setProperty('display', 'none', 'important'); lo.classList.add('hidden'); }
+                    const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+                    
+                    if (data) {
+                        userProfile = data;
+                        document.getElementById('user-name-display').innerText = data.full_name;
+                        document.getElementById('user-avatar').innerText = data.full_name ? data.full_name[0].toUpperCase() : 'M';
+                        if(appMain) { appMain.classList.remove('hidden'); appMain.classList.add('flex'); }
+                        
+                        await window.fetchDataByRole();
+                        window.renderSidebar();
+                        window.navigate(localStorage.getItem('last_tab') || 'dashboard');
+                    } else { window.logout(); }
+                } else { if(lo) { lo.classList.remove('hidden'); lo.classList.add('flex'); lo.style.display = 'flex'; } }
+            } catch (err) { console.error("Auth Error", err); window.logout(); } finally {
+                const loader = document.getElementById('loading'); if(loader) { loader.classList.add('opacity-0'); setTimeout(() => loader.remove(), 700); }
+                lucide.createIcons();
+            }
+        }
+
+        window.handleLogin = async function(e) {
+            e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true; btn.innerText = "DOĞRULANIYOR...";
+            const { error } = await supabaseClient.auth.signInWithPassword({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value });
+            if (error) { document.getElementById('login-error').innerText = "HATA: Bilgiler yanlış."; document.getElementById('login-error').classList.remove('hidden'); btn.disabled = false; btn.innerText = "SİSTEME BAĞLAN"; } 
+            else { window.location.reload(); }
+        }
+
+        // --- DATA FETCHING (STRICT ISOLATION) ---
+        window.fetchDataByRole = async function() {
+            if(!userProfile) return;
+            
+            try {
+                if (userProfile.role === 'teacher') {
+                    // ÖĞRETMEN: SADECE KENDİ ÖĞRENCİLERİNİ ÇEKER (eq teacher_id KİLİDİ)
+                    const [ {data: s}, {data: a} ] = await Promise.all([
+                        supabaseClient.from('profiles').select('*').eq('role', 'student').eq('teacher_id', userProfile.id).order('created_at', {ascending: false}),
+                        supabaseClient.from('assignments').select('*, profiles!assignments_student_id_fkey(full_name)').eq('teacher_id', userProfile.id).order('created_at', {ascending: false})
+                    ]);
+                    students = s || []; assignments = a || [];
+                    
+                    const hwSel = document.getElementById('hw-student');
+                    if(hwSel) hwSel.innerHTML = students.map(st => `<option value="${st.id}">${st.full_name}</option>`).join('');
+                    
+                } else if (userProfile.role === 'student') {
+                    // ÖĞRENCİ: SADECE KENDİ ÖDEVLERİNİ ÇEKER
+                    const { data: a } = await supabaseClient.from('assignments').select('*, profiles!assignments_teacher_id_fkey(full_name)').eq('student_id', userProfile.id).order('created_at', {ascending: false});
+                    myAssignments = a || [];
                 }
-                const { error } = await supabaseClient.from('homework_submissions').insert([{ homework_id: document.getElementById('upload-hw-id').value, student_id: userProfile.id, file_urls: urls, note: document.getElementById('upload-note').value }]);
-                if(!error) { alert("Çözüm rasyonel bir şekilde mühürlendi!"); closeUploadModal(); navigate('s-homeworks'); } else throw error;
-            } catch(err) { alert("Hata: " + err.message); btn.disabled = false; btn.innerText = "TEKRAR DENE"; }
+            } catch(err) { console.error("Data Fetch Error:", err); }
+        }
+
+        // --- NAVIGATION ---
+        window.renderSidebar = function() {
+            const isTeacher = userProfile.role === 'teacher';
+            let items = [];
+            
+            if (isTeacher) {
+                document.getElementById('teacher-header-actions').classList.remove('hidden');
+                document.getElementById('teacher-header-actions').classList.add('flex');
+                items = [
+                    {id:'dashboard',n:'Özet Paneli',i:'layout-dashboard'},
+                    {id:'students',n:'Öğrenci Takibi',i:'users'},
+                    {id:'homeworks',n:'Ödev & Test',i:'file-text'},
+                    {id:'stats',n:'İstatistiksel Eğitim',i:'bar-chart-2'}
+                ];
+            } else {
+                items = [
+                    {id:'dashboard',n:'Öğrenci Kokpiti',i:'layout-dashboard'},
+                    {id:'my_homeworks',n:'Görevlerim',i:'check-square'},
+                    {id:'games',n:'Matematik Oyunları',i:'gamepad-2'},
+                    {id:'my_stats',n:'Gelişim Raporum',i:'trending-up'}
+                ];
+            }
+
+            document.getElementById('sidebar-nav').innerHTML = items.map(x => `<button onclick="window.navigate('${x.id}')" id="nav-${x.id}" class="sidebar-link w-full flex items-center space-x-4 px-5 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest transition hover:bg-white/5 group"><i data-lucide="${x.i}" class="w-5 h-5"></i><span>${x.n}</span></button>`).join('');
+            lucide.createIcons();
+        }
+
+        window.navigate = function(v) {
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            const nBtn = document.getElementById('nav-'+v); if(nBtn) nBtn.classList.add('active');
+            localStorage.setItem('last_tab', v);
+            const cont = document.getElementById('view-content');
+            
+            // Eğer öğrenci panelinde oyunlara tıklandıysa, sekme değiştirmek yerine PopUp açıyoruz.
+            if(v === 'games') {
+                document.getElementById('math-games-modal').classList.remove('hidden');
+                document.getElementById('math-games-modal').classList.add('flex');
+                // Aktif sekme kokpitte kalsın
+                window.navigate('dashboard');
+                return;
+            }
+
+            cont.innerHTML = '<div class="p-20 flex justify-center items-center flex-col gap-4 animate__animated animate__fadeIn"><i class="fa-solid fa-atom fa-spin text-5xl text-blue-600"></i><p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Mühürler Çözülüyor...</p></div>';
+            
+            setTimeout(() => {
+                if (userProfile.role === 'teacher') {
+                    if(v === 'dashboard') renderTeacherDashboard();
+                    else if(v === 'students') renderTeacherStudents();
+                    else if(v === 'homeworks') renderTeacherHomeworks();
+                    else if(v === 'stats') renderTeacherStats();
+                    else renderTeacherDashboard();
+                } else {
+                    if(v === 'dashboard') renderStudentDashboard();
+                    else if(v === 'my_homeworks') renderStudentHomeworks();
+                    else if(v === 'my_stats') renderStudentStats();
+                    else renderStudentDashboard();
+                }
+                lucide.createIcons();
+            }, 50);
+        }
+
+        // ==========================================
+        // TEACHER MODULES
+        // ==========================================
+        function renderTeacherDashboard() {
+            document.getElementById('page-title').innerText = 'Eğitmen Özet Paneli';
+            const totalStudents = students.length;
+            const activeHw = assignments.filter(a => a.status !== 'completed').length;
+            
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-8 view-frame animate__animated animate__fadeIn">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="glass-card p-10 rounded-[3rem] text-center border-l-8 border-l-blue-500 shadow-xl relative overflow-hidden">
+                            <i class="fa-solid fa-users absolute -right-4 -bottom-4 text-9xl text-blue-500/10"></i>
+                            <h2 class="text-7xl font-black text-white italic drop-shadow-lg">${totalStudents}</h2>
+                            <p class="text-[10px] font-black uppercase text-slate-500 tracking-widest mt-2">Kayıtlı Öğrenci</p>
+                        </div>
+                        <div class="glass-card p-10 rounded-[3rem] text-center border-l-8 border-l-orange-500 shadow-xl relative overflow-hidden">
+                            <i class="fa-solid fa-file-signature absolute -right-4 -bottom-4 text-9xl text-orange-500/10"></i>
+                            <h2 class="text-7xl font-black text-white italic drop-shadow-lg">${activeHw}</h2>
+                            <p class="text-[10px] font-black uppercase text-slate-500 tracking-widest mt-2">Bekleyen Ödev/Görev</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderTeacherStudents() {
+            document.getElementById('page-title').innerText = 'Öğrenci Takibi';
+            const generateBox = (s) => `
+                <div class="glass-card p-8 rounded-[3rem] text-center flex flex-col justify-between group relative overflow-hidden transition-all hover:-translate-y-2 hover:border-blue-500/30">
+                    <div class="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-500 text-3xl font-black mx-auto mb-4 shadow-inner group-hover:scale-110 transition-transform">${s.full_name ? s.full_name[0].toUpperCase() : 'Ö'}</div>
+                    <div><h4 class="text-lg font-black uppercase text-white tracking-tighter drop-shadow-md">${s.full_name}</h4><p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">${s.email}</p></div>
+                    <div class="mt-6 pt-4 border-t border-white/5"><button onclick="window.deleteStudent('${s.id}')" class="text-red-500 hover:text-red-400 text-[10px] font-black uppercase tracking-widest transition"><i class="fa-solid fa-trash mr-1"></i> Kaydı Sil</button></div>
+                </div>`;
+
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-8 view-frame animate__animated animate__fadeIn">
+                    <div class="flex justify-between items-center glass-card p-6 rounded-3xl shadow-xl border border-white/5">
+                        <div><h2 class="text-xl font-black text-white uppercase italic tracking-tighter">Sınıf Listesi</h2></div>
+                        <button onclick="document.getElementById('new-student-modal').classList.remove('hidden'); document.getElementById('new-student-modal').classList.add('flex');" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase shadow-lg border border-white/10 hover:scale-105 transition"><i data-lucide="user-plus" class="mr-2 inline w-4 h-4"></i>YENİ ÖĞRENCİ</button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        ${students.map(s => generateBox(s)).join('') || '<p class="col-span-full opacity-30 italic font-black text-center py-10 uppercase text-xs">Sisteme kayıtlı öğrenci bulunmuyor.</p>'}
+                    </div>
+                </div>`;
+        }
+
+        window.saveNewStudent = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('ns-btn'); btn.disabled = true; btn.innerText = "KAYDEDİLİYOR...";
+            const email = document.getElementById('ns-email').value;
+            const password = document.getElementById('ns-password').value;
+            const name = document.getElementById('ns-name').value;
+
+            try {
+                // 1. Auth SignUp
+                const { data: authData, error: authErr } = await supabaseClient.auth.signUp({ email: email, password: password });
+                if(authErr) throw authErr;
+
+                // 2. Profile Insert (STRICTLY BIND TO CURRENT TEACHER)
+                const { error: profileErr } = await supabaseClient.from('profiles').update({
+                    full_name: name,
+                    role: 'student',
+                    teacher_id: userProfile.id // Öğretmen kilidi
+                }).eq('id', authData.user.id);
+
+                if(profileErr) throw profileErr;
+
+                alert("Öğrenci başarıyla mühürlendi!");
+                window.closeModal('new-student-modal');
+                document.getElementById('new-student-form').reset();
+                await window.fetchDataByRole();
+                window.navigate('students');
+
+            } catch (err) {
+                alert("Kayıt Hatası: " + err.message);
+            } finally {
+                btn.disabled = false; btn.innerText = "SİSTEME KAYDET";
+            }
         };
 
-        window.onload = initAuth;
+        window.deleteStudent = async function(id) {
+            if(confirm("Öğrenci kaydını ve tüm verilerini silmek istediğine emin misin Ali Hoca?")) {
+                const { error } = await supabaseClient.from('profiles').delete().eq('id', id);
+                if(!error) { await window.fetchDataByRole(); window.navigate('students'); } else alert(error.message);
+            }
+        };
+
+        function renderTeacherHomeworks() {
+            document.getElementById('page-title').innerText = 'Ödev & Test Merkezi';
+            
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-8 view-frame animate__animated animate__fadeIn">
+                    <div class="flex flex-col md:flex-row justify-between items-center glass-card p-6 rounded-3xl shadow-xl border border-white/5 gap-4">
+                        <div><h2 class="text-xl font-black text-white uppercase italic tracking-tighter">Görevlendirmeler</h2></div>
+                        <div class="flex gap-3 w-full md:w-auto">
+                            <a href="https://gen.matota.online" target="_blank" class="flex-1 md:flex-none text-center px-6 py-3 bg-orange-600 text-white rounded-xl font-black text-[10px] uppercase shadow-lg border border-white/10 hover:scale-105 transition"><i class="fa-solid fa-bolt mr-2"></i>Test Hazırla</a>
+                            <button onclick="document.getElementById('add-homework-modal').classList.remove('hidden'); document.getElementById('add-homework-modal').classList.add('flex');" class="flex-1 md:flex-none px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase shadow-lg border border-white/10 hover:scale-105 transition"><i data-lucide="plus" class="mr-2 inline w-4 h-4"></i>Ödev Ata</button>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5">
+                        <table class="w-full text-left">
+                            <thead class="bg-black/40 text-[9px] font-black uppercase text-slate-500 border-b border-white/10">
+                                <tr><th class="p-6">Öğrenci</th><th class="p-6">Ödev Başlığı</th><th class="p-6 text-center">Teslim</th><th class="p-6 text-center">Durum</th><th class="p-6 text-right">#</th></tr>
+                            </thead>
+                            <tbody class="text-[11px] font-bold text-slate-300">
+                                ${assignments.map(a => `
+                                <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                                    <td class="p-6 font-black text-white">${a.profiles?.full_name || '-'}</td>
+                                    <td class="p-6 uppercase">${a.title}</td>
+                                    <td class="p-6 text-center text-[10px] tracking-widest text-slate-400">${new Date(a.due_date).toLocaleDateString('tr-TR')}</td>
+                                    <td class="p-6 text-center"><span class="px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${a.status==='completed' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-orange-500/20 text-orange-400 border border-orange-500/30'}">${a.status==='completed' ? 'Tamamlandı' : 'Bekliyor'}</span></td>
+                                    <td class="p-6 text-right"><button onclick="window.deleteItem('assignments','${a.id}')" class="text-red-500 hover:text-red-400 transition"><i class="fa-solid fa-trash"></i></button></td>
+                                </tr>
+                                `).join('') || '<tr><td colspan="5" class="p-10 text-center opacity-30 italic font-black uppercase text-xs">Atanmış görev yok.</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+        }
+
+        window.saveHomework = async function(e) {
+            e.preventDefault();
+            const sid = document.getElementById('hw-student').value;
+            const title = document.getElementById('hw-title').value;
+            const date = document.getElementById('hw-date').value;
+
+            const { error } = await supabaseClient.from('assignments').insert([{
+                teacher_id: userProfile.id,
+                student_id: sid,
+                title: title,
+                due_date: date,
+                status: 'pending'
+            }]);
+
+            if(!error) { window.closeModal('add-homework-modal'); window.fetchDataByRole(); window.navigate('homeworks'); }
+            else alert(error.message);
+        };
+
+        function renderTeacherStats() {
+            document.getElementById('page-title').innerText = 'İstatistiksel Eğitim Merkezi';
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-8 view-frame animate__animated animate__fadeIn">
+                    <div class="glass-card p-12 rounded-[3rem] shadow-2xl text-center border border-white/5 relative overflow-hidden">
+                        <i class="fa-solid fa-chart-line absolute -left-10 -bottom-10 text-[15rem] text-blue-500/5"></i>
+                        <h2 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-4 relative z-10">İstatistiksel Eğitim Analizleri</h2>
+                        <p class="text-sm text-slate-400 font-medium max-w-2xl mx-auto relative z-10">Öğrenci gelişim verileri, deneme sınavı analizleri ve yapay zeka destekli başarı grafikleri bu modülde derlenmektedir. Yeni sınav verileri girildikçe aktif olacaktır.</p>
+                        <div class="mt-8 inline-block px-6 py-3 liquid-inner rounded-2xl border border-blue-500/30 text-blue-400 font-black text-[10px] uppercase tracking-widest relative z-10">Veri Bekleniyor...</div>
+                    </div>
+                </div>`;
+        }
+
+        // ==========================================
+        // STUDENT MODULES (MODERN UI)
+        // ==========================================
+        function renderStudentDashboard() {
+            document.getElementById('page-title').innerText = 'Öğrenci Kokpiti';
+            document.getElementById('page-subtitle').innerText = 'Matematikte Doğru Rota';
+            
+            const pending = myAssignments.filter(a => a.status !== 'completed').length;
+            const completed = myAssignments.filter(a => a.status === 'completed').length;
+
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-8 view-frame animate__animated animate__fadeIn">
+                    <div class="student-widget bg-gradient-to-r from-blue-600 to-indigo-900 shadow-2xl shadow-blue-900/50 border border-white/10">
+                        <h2 class="text-3xl md:text-5xl font-black text-white italic tracking-tighter drop-shadow-lg mb-2">Hoş Geldin, ${userProfile.full_name.split(' ')[0]}!</h2>
+                        <p class="text-blue-200 font-bold text-sm tracking-widest uppercase opacity-80">Bugün matematik için harika bir gün.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="glass-card p-8 rounded-[2.5rem] flex items-center justify-between border-l-4 border-l-orange-500 hover:-translate-y-2 transition shadow-xl cursor-pointer" onclick="window.navigate('my_homeworks')">
+                            <div><h4 class="text-3xl font-black text-white">${pending}</h4><p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Bekleyen Görev</p></div>
+                            <div class="w-14 h-14 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-500 text-xl"><i class="fa-solid fa-clock"></i></div>
+                        </div>
+                        <div class="glass-card p-8 rounded-[2.5rem] flex items-center justify-between border-l-4 border-l-emerald-500 hover:-translate-y-2 transition shadow-xl cursor-pointer" onclick="window.navigate('my_homeworks')">
+                            <div><h4 class="text-3xl font-black text-white">${completed}</h4><p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Biten Görev</p></div>
+                            <div class="w-14 h-14 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-xl"><i class="fa-solid fa-check-double"></i></div>
+                        </div>
+                        <div class="glass-card p-8 rounded-[2.5rem] flex items-center justify-between border-l-4 border-l-blue-500 hover:-translate-y-2 transition shadow-xl cursor-pointer" onclick="window.navigate('games')">
+                            <div><h4 class="text-lg font-black text-white uppercase italic">Oyun Oyna</h4><p class="text-[9px] font-black uppercase text-slate-400 tracking-widest mt-1">Zihnini Geliştir</p></div>
+                            <div class="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl"><i class="fa-solid fa-gamepad"></i></div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderStudentHomeworks() {
+            document.getElementById('page-title').innerText = 'Görevlerim & Ödevler';
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-6 view-frame animate__animated animate__fadeIn">
+                    <div class="glass-card rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5 p-4">
+                        ${myAssignments.map(a => `
+                            <div class="p-6 liquid-inner rounded-3xl mb-4 last:mb-0 border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition hover:bg-white/5">
+                                <div>
+                                    <h4 class="text-lg font-black text-white uppercase tracking-tighter">${a.title}</h4>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2"><i class="fa-regular fa-calendar text-blue-400 mr-1"></i> Teslim: ${new Date(a.due_date).toLocaleDateString('tr-TR')} • Atayan: ${a.profiles?.full_name}</p>
+                                </div>
+                                <div>
+                                    ${a.status === 'completed' 
+                                        ? `<span class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"><i class="fa-solid fa-check mr-1"></i> Tamamlandı</span>`
+                                        : `<button onclick="window.completeHomework('${a.id}')" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase shadow-lg hover:bg-blue-500 transition tracking-widest border border-white/10">Ödevi Teslim Et</button>`
+                                    }
+                                </div>
+                            </div>
+                        `).join('') || '<div class="p-10 text-center opacity-40"><i class="fa-solid fa-mug-hot text-4xl mb-4"></i><p class="text-xs font-black uppercase tracking-widest">Şu an için atanan bir görev yok. Dinlenebilirsin!</p></div>'}
+                    </div>
+                </div>`;
+        }
+
+        window.completeHomework = async function(id) {
+            const { error } = await supabaseClient.from('assignments').update({ status: 'completed' }).eq('id', id);
+            if(!error) { alert("Tebrikler! Görev tamamlandı."); await window.fetchDataByRole(); window.navigate('my_homeworks'); }
+        };
+
+        function renderStudentStats() {
+            document.getElementById('page-title').innerText = 'Gelişim Raporum';
+            document.getElementById('view-content').innerHTML = `
+                <div class="space-y-8 view-frame animate__animated animate__fadeIn">
+                    <div class="glass-card p-12 rounded-[3rem] shadow-2xl text-center border border-white/5 relative overflow-hidden">
+                        <i class="fa-solid fa-chart-pie absolute -left-10 -bottom-10 text-[15rem] text-emerald-500/5"></i>
+                        <h2 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-4 relative z-10">İstatistiksel Eğitim Raporu</h2>
+                        <p class="text-sm text-slate-400 font-medium max-w-xl mx-auto relative z-10">Ali Hoca tarafından girilecek deneme sınavı analizlerin ve yapay zeka destekli gelişim grafiğin bu ekranda yer alacaktır. Çalışmaya devam et!</p>
+                    </div>
+                </div>`;
+        }
+
+        // --- UTILS ---
+        window.deleteItem = async (tbl, id) => { if(confirm("Mühürü kırmak istediğine emin misin?")) { const { error } = await supabaseClient.from(tbl).delete().eq('id', id); if(!error) { await window.fetchDataByRole(); window.navigate(localStorage.getItem('last_tab')); } else alert(error.message); } };
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => { 
+            initAuth(); 
+            const loginForm = document.getElementById('login-form'); 
+            if (loginForm) loginForm.onsubmit = window.handleLogin; 
+        });
     </script>
 </body>
 </html>
